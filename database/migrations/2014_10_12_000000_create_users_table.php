@@ -16,7 +16,7 @@ class CreateUsersTable extends Migration {
             $table->string('username', 30)->primary();
             $table->boolean('is_active');
             $table->boolean('has_location_full_access');
-            $table->string('email')->unique();
+            $table->string('display_name', 100);
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
@@ -29,7 +29,7 @@ class CreateUsersTable extends Migration {
      * @return void
      */
     public function down() {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('user_account');
     }
 
 }
