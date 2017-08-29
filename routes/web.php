@@ -21,3 +21,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('/child-health-records', 'ChildHealthRecordController');
 });
 
+  Route::get('/test', function() {
+      return view("skarla-tester");
+  });
+
+
