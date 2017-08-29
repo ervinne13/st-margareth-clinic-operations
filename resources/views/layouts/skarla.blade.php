@@ -26,9 +26,6 @@ $navPath      = "layouts.skarla.nav";
         @include("{$partialsPath}.assets.default-css")
         @include("{$partialsPath}.others.favicon")
 
-
-        @yield("content")
-
         <script>
             let ASSET_PATH_BASE = "{{url('/vendor/skarla/assets')}}";
             let BASE_URL = "{{url('/')}}";
@@ -36,7 +33,7 @@ $navPath      = "layouts.skarla.nav";
     </head>
     <!-- END Head -->
 
-    <body class="sidebar-full-height sidebar-fixed ">
+    <body class="{{$pageLayout or "sidebar-full-height sidebar-fixed"}}">    
 
         <!-- Bower Libraries Scripts -->
         <script src="{{skarla_assets_url("/vendor/js/lib.min.js")}}"></script>
