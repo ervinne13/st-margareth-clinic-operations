@@ -39,9 +39,11 @@ $navPath      = "layouts.skarla.nav";
         <script src="{{skarla_assets_url("/vendor/js/lib.min.js")}}"></script>
 
         <div class="main-wrap">
-            <nav class="navigation">                
-                @include("{$navPath}.top")
+            <nav class="navigation">
+                @if(Auth::check())
+                @include("{$navPath}.top")                                
                 @include("{$navPath}.dynamic-access-left")
+                @endif
             </nav>
 
             <div class="content">

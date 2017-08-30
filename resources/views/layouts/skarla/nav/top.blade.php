@@ -352,10 +352,8 @@
 
                 <li class="dropdown">
                     <a class="dropdown-toggle user-dropdown" data-toggle="dropdown" href="#" role="button">
-                        <span class="m-r-1">Sarina Murphy</span>
-                        <div class="avatar avatar-image avatar-sm avatar-inline">
-                            <img alt="User" src="https://s3.amazonaws.com/uifaces/faces/twitter/darylws/128.jpg">
-                        </div>
+                        <span class="m-r-1">{{Auth::user()->getDisplayName()}}</span>
+                        <i class="fa fa-user"></i>
                     </a>
                     <ul class="dropdown-menu">
                         <li class="dropdown-header">
@@ -363,26 +361,20 @@
                         </li>
                         <li role="separator" class="divider"></li>
                         <li>
-                            <a href="../apps/profile-details.html">
+                            <a href="{{url("master-file/user/" . Auth::user()->username)}}">
                                 <i class="fa fa-user fa-fw text-gray-dark m-r-1"></i>
                                 Your Profile
                             </a>
-                        </li>
+                        </li>                      
                         <li>
-                            <a href="../apps/profile-edit.html">
-                                <i class="fa fa-gear fa-fw text-gray-dark m-r-1"></i>
-                                Settings
-                            </a>
-                        </li>
-                        <li>
-                            <a href="../apps/faq.html">
-                                <i class="fa fa-file fa-fw text-gray-dark m-r-1"></i>
-                                Faq
+                            <a href="{{url("help")}}">
+                                <i class="fa fa-question-circle fa-fw text-gray-dark m-r-1"></i>
+                                Help
                             </a>
                         </li>
                         <li role="separator" class="divider"></li>
                         <li>
-                            <a href="../pages/login.html">
+                            <a href="{{url("logout")}}">
                                 <i class="fa fa-sign-out fa-fw text-gray-dark m-r-1"></i>
                                 Log Out
                             </a>
