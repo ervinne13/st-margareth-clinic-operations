@@ -114,4 +114,14 @@ class UserAccount extends Authenticatable
     }
 
     // </editor-fold>
+
+    /**/
+    // <editor-fold defaultstate="collapsed" desc="Encapsulations">
+
+    public function getDisplayName()
+    {
+        return $this->display_name;
+    }
+
+    // </editor-fold>
 }
