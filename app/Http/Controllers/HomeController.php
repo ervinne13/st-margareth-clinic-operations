@@ -7,7 +7,7 @@ use function view;
 class HomeController extends Controller {
 
     public function index() {
-        return view('skarla-tester');
+        return view('pages.home.index');
     }
 
 }
