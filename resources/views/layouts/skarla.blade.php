@@ -14,7 +14,7 @@ $navPath      = "layouts.skarla.nav";
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
         <title>
-            SKARLA | Default Fixed 
+            {{$pageTitle or config('app.name')}}
         </title>
 
         <!--START Loader -->
