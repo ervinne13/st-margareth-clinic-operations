@@ -28,9 +28,9 @@ class NumberSeriesSeeder extends Seeder
                 "module_code"         => $numberSeries[1],
                 "effective_date"      => Carbon::now(),
                 "year_prefix_format"  => "y",
-                "uses_code_as_prefix" => false,
+                "uses_code_as_prefix" => true,
                 "starting_number"     => 0,
-                "ending_number"       => 9999,
+                "ending_number"       => 99999,
                 "last_number_used"    => 0,
             ];
         }
