@@ -49,12 +49,12 @@ class UserAccount extends Authenticatable
 
     public function locations()
     {
-        return $this->belongsToMany(Location::class, "user_location", "user_username", "location_code")->distinct();
+        return $this->belongsToMany(Location::class, "user_account_location", "user_username", "location_code")->distinct();
     }
 
     public function companies()
     {
-        return $this->belongsToMany(Company::class, "user_location", "user_username", "company_code")->distinct();
+        return $this->belongsToMany(Company::class, "user_account_location", "user_username", "company_code")->distinct();
     }
 
     // <editor-fold defaultstate="collapsed" desc="Functions">

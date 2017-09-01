@@ -23,7 +23,8 @@ $uses     = ["form", "datepicker", "dropdown-table"];
                 <h4 class="m-b-0 ">Sales Journal <small>{{$routeActionName}}</small></h4>                
             </div>
             <div class="col-md-4 pull-right">
-                <h4 class="text-right">Document: <b class="text-brilliant-rose text-">SJ-00010</b></h4>
+                <h5 class="text-right m-b-0">Document: <b class="text-brilliant-rose">SJ-00010</b></h5>
+                <h5 class="text-right m-t-0">Date: <b class="text-gray">{{$sj->document_date->format("m/d/Y")}}</b></h5>
             </div>
         </div>        
         <div class="panel panel-default b-a-0 p-10 shadow-box">            

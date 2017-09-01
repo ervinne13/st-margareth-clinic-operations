@@ -5,9 +5,12 @@ namespace App\Providers;
 use App\Modules\System\Module\Repository\Impl\ModuleRepositoryDefaultImpl;
 use App\Modules\System\Module\Repository\ModuleRepository;
 use App\Modules\System\Module\Transformer\ModuleTransformer;
+use App\Modules\System\NumberSeries\Repository\Impl\NumberSeriesRepositoryDefaultImpl;
+use App\Modules\System\NumberSeries\Repository\NumberSeriesRepository;
 use Illuminate\Support\ServiceProvider;
 
-class RepositoryProvider extends ServiceProvider {
+class RepositoryProvider extends ServiceProvider
+{
 
     /**
      * Indicates if loading of the provider is deferred.
@@ -21,9 +24,12 @@ class RepositoryProvider extends ServiceProvider {
      *
      * @return void
      */
-    public function register() {
+    public function register()
+    {
 
-        $this->app->bind(ModuleRepository::class, function() {
+        $this->app->bind(NumberSeriesRepository::class, NumberSeriesRepositoryDefaultImpl::class);
+        $this->app->bind(ModuleRepository::class, function()
+        {
             $transformer = new ModuleTransformer();
             return new ModuleRepositoryDefaultImpl($transformer);
         });
@@ -34,9 +40,11 @@ class RepositoryProvider extends ServiceProvider {
      *
      * @return array
      */
-    public function provides() {
+    public function provides()
+    {
         return [
-            ModuleRepository::class
+            NumberSeriesRepository::class,
+            ModuleRepository::class,
         ];
     }
 

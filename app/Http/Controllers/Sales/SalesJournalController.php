@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Sales;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Base\BaseModel;
+use App\Modules\MasterFile\Customer\Customer;
+use App\Modules\System\Location\Location;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -31,14 +33,14 @@ class SalesJournalController extends Controller
      */
     public function create()
     {
-        $sj = new BaseModel();
 
-        $sj->document_date = Carbon::now();
-        $sj->due_date      = Carbon::now();
+        $formData       = $this->getFormViewData();
+        $formData["sj"] = new BaseModel();
 
-        return view("{$this->viewPath}.form", [
-            "sj" => $sj
-        ]);
+        $formData["sj"]->document_date = Carbon::now();
+        $formData["sj"]->due_date      = Carbon::now();
+
+        return view("{$this->viewPath}.form", $formData);
     }
 
     /**
@@ -95,6 +97,14 @@ class SalesJournalController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    protected function getFormViewData()
+    {
+        return [
+            "localLocationCode" => Location::Local()->first(),
+            "customers"         => Customer::all()
+        ];
     }
 
 }

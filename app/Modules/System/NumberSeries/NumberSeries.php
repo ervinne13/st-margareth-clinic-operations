@@ -35,4 +35,9 @@ class NumberSeries extends Model
         return $this->belongsTo(Module::class, "module_code");
     }
 
+    public function scopeCode($query, $code)
+    {
+        return $query->where("code", $code);
+    }
+
 }

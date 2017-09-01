@@ -16,6 +16,11 @@ class DatabaseSeeder extends Seeder
         $this->call(DefaultRolesAndUsersSeeder::class);
         $this->call(VaccinesSeeder::class);
         $this->call(NumberSeriesSeeder::class);
+
+        //  Master Files
+        $this->call(LocationsSeeder::class);
+        $this->call(CustomersSeeder::class);
+                
     }
 
 }
