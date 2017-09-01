@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Modules\System\Module;
+namespace App\Modules\Security\Role;
 
+use App\Modules\Security\ACL\AccessControlList;
 use Illuminate\Database\Eloquent\Model;
 
-class Module extends Model
+class Role extends Model
 {
 
     public $incrementing  = false;
-    protected $table      = "module";
+    protected $table      = "role";
     protected $primaryKey = "code";
-    protected $fillable   = ["code", "max_access_level", "display_name"];
+    protected $fillable   = ["code", "display_name"];
 
     public function accessControlList()
     {
