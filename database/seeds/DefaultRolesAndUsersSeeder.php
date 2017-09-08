@@ -24,7 +24,6 @@ class DefaultRolesAndUsersSeeder extends Seeder
     {
         $this->createRoles();
         $this->createAccessControls();
-        $this->createScopeControls();
         $this->createAccessControlLists();
         $this->createAdmin();
     }
@@ -51,15 +50,6 @@ class DefaultRolesAndUsersSeeder extends Seeder
         AccessControl::insert($accessControls);
     }
 
-    private function createScopeControls()
-    {
-        $scopeControls = [
-            ["code" => "OWNER", "level" => 1, "display_name" => "Owned Documents"],
-            ["code" => "LOCATION", "level" => 2, "display_name" => "Same Location"],
-            ["code" => "ALL", "level" => 3, "display_name" => "All Documents"]
-        ];
-        ScopeControl::insert($scopeControls);
-    }
 
     private function createAccessControlLists()
     {
@@ -72,7 +62,6 @@ class DefaultRolesAndUsersSeeder extends Seeder
                 "role_code"           => "INVMAN",
                 "module_code"         => $moduleCode,
                 "access_control_code" => "MANAGER",
-                "scope_control_code"  => "LOCATION",
             ];
         }
 
@@ -81,7 +70,6 @@ class DefaultRolesAndUsersSeeder extends Seeder
                 "role_code"           => "INVMAN",
                 "module_code"         => $moduleCode,
                 "access_control_code" => "VIEWER",
-                "scope_control_code"  => "LOCATION",
             ];
         }
 
@@ -95,7 +83,6 @@ class DefaultRolesAndUsersSeeder extends Seeder
                 "role_code"           => "OPDSTF",
                 "module_code"         => $moduleCode,
                 "access_control_code" => "AUTHOR",
-                "scope_control_code"  => "LOCATION",
             ];
         }
 
@@ -104,7 +91,6 @@ class DefaultRolesAndUsersSeeder extends Seeder
                 "role_code"           => "OPDSTF",
                 "module_code"         => $moduleCode,
                 "access_control_code" => "VIEWER",
-                "scope_control_code"  => "LOCATION",
             ];
         }
 
