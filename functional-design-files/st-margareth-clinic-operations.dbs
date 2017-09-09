@@ -1,0 +1,2614 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="Payroll Skarla" id="Project_2510a9b" template="Default" database="PostgreSQL" >
+	<schema name="hris" schemaname="hris" >
+		<table name="employee" >
+			<column name="code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="is_active" type="bool" jt="-7" mandatory="y" >
+				<defo>true</defo>
+			</column>
+			<column name="location_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="policy_code" type="varchar" length="30" jt="12" />
+			<column name="position_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="tax_category_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="payroll_type_code" type="varchar" length="30" jt="12" />
+			<column name="email" type="varchar" length="60" jt="12" mandatory="y" />
+			<column name="first_name" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="middle_name" type="varchar" length="100" jt="12" />
+			<column name="last_name" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="address" type="text" length="100" jt="12" />
+			<column name="birth_date" type="date" jt="91" />
+			<column name="gender_code" type="varchar" length="2" jt="12" mandatory="y" >
+				<defo>&#039;M&#039;</defo>
+			</column>
+			<column name="civil_status_code" type="varchar" length="2" jt="12" mandatory="y" >
+				<defo>&#039;S&#039;</defo>
+			</column>
+			<column name="contact_number_1" type="varchar" length="30" jt="12" />
+			<column name="contact_number_2" type="varchar" length="30" jt="12" />
+			<column name="basic_salary" type="numeric" length="10" decimal="4" jt="2" mandatory="y" />
+			<column name="basic_salary_uom" type="varchar" length="4" jt="12" mandatory="y" >
+				<defo>&#039;MON&#039;</defo>
+				<comment><![CDATA[UOM = Unit of Measurement: (MON)Month, (DAY)Day, (HR)Hour, (MIN) Minute, (EA) Exact Amount]]></comment>
+			</column>
+			<column name="date_hired" type="date" jt="91" />
+			<column name="created_at" type="timestamp" jt="93" />
+			<column name="updated_at" type="timestamp" jt="93" />
+			<index name="pk_employee" unique="PRIMARY_KEY" >
+				<column name="code" />
+			</index>
+			<index name="idx_employee" unique="NORMAL" >
+				<column name="location_code" />
+			</index>
+			<index name="idx_employee_0" unique="NORMAL" >
+				<column name="tax_category_code" />
+			</index>
+			<index name="idx_employee_1" unique="NORMAL" >
+				<column name="payroll_type_code" />
+			</index>
+			<index name="idx_employee_2" unique="NORMAL" >
+				<column name="position_code" />
+			</index>
+			<index name="idx_employee_3" unique="NORMAL" >
+				<column name="policy_code" />
+			</index>
+			<fk name="fk_employee_location_code" to_schema="public" to_table="location" >
+				<fk_column name="location_code" pk="code" />
+			</fk>
+			<fk name="fk_employee_tax_category_code" to_schema="payroll" to_table="tax_category" >
+				<fk_column name="tax_category_code" pk="code" />
+			</fk>
+			<fk name="fk_employee_position_code" to_schema="hris" to_table="position" >
+				<fk_column name="position_code" pk="code" />
+			</fk>
+			<fk name="fk_employee_policy_code" to_schema="hris" to_table="policy" >
+				<fk_column name="policy_code" pk="code" />
+			</fk>
+			<fk name="fk_employee_payroll_type_code" to_schema="payroll" to_table="payroll_type" >
+				<fk_column name="payroll_type_code" pk="code" />
+			</fk>
+		</table>
+		<table name="employee_payroll_item_amount" >
+			<column name="employee_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="payroll_item_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="amount" type="numeric" length="10" decimal="4" jt="2" mandatory="y" />
+			<index name="pk_employee_payroll_item_amount" unique="PRIMARY_KEY" >
+				<column name="employee_code" />
+				<column name="payroll_item_code" />
+			</index>
+			<index name="idx_employee_payroll_item_amount" unique="NORMAL" >
+				<column name="employee_code" />
+			</index>
+			<index name="idx_employee_payroll_item_amount_0" unique="NORMAL" >
+				<column name="payroll_item_code" />
+			</index>
+			<fk name="fk_employee_payroll_item_amount_employee_code" to_schema="hris" to_table="employee" >
+				<fk_column name="employee_code" pk="code" />
+			</fk>
+			<fk name="fk_employee_payroll_item_amount_payroll_item_code" to_schema="payroll" to_table="payroll_item" >
+				<fk_column name="payroll_item_code" pk="code" />
+			</fk>
+		</table>
+		<table name="employee_shift_adjustment" >
+			<column name="employee_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="date_applicable" type="date" jt="91" mandatory="y" />
+			<column name="scheduled_in" type="time" jt="92" mandatory="y" />
+			<column name="scheduled_out" type="time" jt="92" mandatory="y" />
+			<column name="shift_differential_start" type="time" jt="92" />
+			<column name="shift_differential_end" type="time" jt="92" />
+			<column name="scheduled_break_in_1" type="time" jt="92" />
+			<column name="scheduled_break_out_1" type="time" jt="92" />
+			<column name="forced_break_minutes" type="integer" jt="4" mandatory="y" >
+				<defo>60</defo>
+			</column>
+			<index name="pk_employee_shift_adjustment" unique="PRIMARY_KEY" >
+				<column name="employee_code" />
+				<column name="date_applicable" />
+			</index>
+			<index name="idx_employee_shift_adjustment" unique="NORMAL" >
+				<column name="employee_code" />
+			</index>
+			<fk name="fk_employee_shift_adjustment_employee_code" to_schema="hris" to_table="employee" >
+				<fk_column name="employee_code" pk="code" />
+			</fk>
+		</table>
+		<table name="employee_work_schedule" >
+			<column name="effective_date" type="date" jt="91" mandatory="y" >
+				<defo>(&#039;now&#039;::text)::date</defo>
+			</column>
+			<column name="employee_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="work_schedule_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="locked" type="bool" jt="-7" mandatory="y" >
+				<defo>false</defo>
+			</column>
+			<index name="pk_employee_work_schedule" unique="PRIMARY_KEY" >
+				<column name="employee_code" />
+				<column name="effective_date" />
+			</index>
+			<index name="idx_employee_work_schedule" unique="NORMAL" >
+				<column name="employee_code" />
+			</index>
+			<index name="idx_employee_work_schedule_0" unique="NORMAL" >
+				<column name="work_schedule_code" />
+			</index>
+			<fk name="fk_employee_work_schedule_employee_code" to_schema="hris" to_table="employee" >
+				<fk_column name="employee_code" pk="code" />
+			</fk>
+			<fk name="fk_employee_work_schedule_code" to_schema="hris" to_table="work_schedule" >
+				<fk_column name="work_schedule_code" pk="code" />
+			</fk>
+		</table>
+		<table name="holiday" >
+			<column name="code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="is_active" type="bool" jt="-7" mandatory="y" />
+			<column name="display_name" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="is_repeating" type="bool" jt="-7" mandatory="y" >
+				<defo>false</defo>
+			</column>
+			<column name="holiday_type_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="date" type="date" jt="91" mandatory="y" >
+				<defo>(&#039;now&#039;::text)::date</defo>
+			</column>
+			<column name="last_date_applicable" type="date" jt="91" />
+			<column name="applies_to_all_location" type="bool" jt="-7" mandatory="y" >
+				<defo>true</defo>
+			</column>
+			<index name="pk_holiday" unique="PRIMARY_KEY" >
+				<column name="code" />
+			</index>
+		</table>
+		<table name="holiday_location" >
+			<column name="holiday_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="location_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<index name="idx_holiday_location" unique="NORMAL" >
+				<column name="location_code" />
+			</index>
+			<index name="pk_holiday_location" unique="PRIMARY_KEY" >
+				<column name="holiday_code" />
+				<column name="location_code" />
+			</index>
+			<fk name="fk_holiday_location_holiday_code" to_schema="hris" to_table="holiday" >
+				<fk_column name="holiday_code" pk="code" />
+			</fk>
+			<fk name="fk_holiday_location_code" to_schema="public" to_table="location" >
+				<fk_column name="location_code" pk="code" />
+			</fk>
+		</table>
+		<table name="policy" >
+			<column name="code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="display_name" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="description" type="text" jt="12" />
+			<column name="required_hours_daily" type="integer" jt="4" mandatory="y" >
+				<defo>8</defo>
+			</column>
+			<column name="grace_period_minutes" type="integer" jt="4" mandatory="y" >
+				<defo>0</defo>
+			</column>
+			<column name="is_break_time_strict" type="bool" jt="-7" mandatory="y" >
+				<defo>false</defo>
+			</column>
+			<column name="created_at" type="timestamp" jt="93" />
+			<column name="created_by" type="varchar" length="30" jt="12" />
+			<column name="updated_at" type="timestamp" jt="93" />
+			<column name="updated_by" type="varchar" length="30" jt="12" />
+			<index name="pk_policy" unique="PRIMARY_KEY" >
+				<column name="code" />
+			</index>
+			<index name="idx_policy_name" unique="UNIQUE" >
+				<column name="display_name" />
+			</index>
+		</table>
+		<table name="policy_payroll_item" >
+			<column name="policy_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="payroll_item_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<index name="pk_policy_payroll_items" unique="PRIMARY_KEY" >
+				<column name="policy_code" />
+				<column name="payroll_item_code" />
+			</index>
+			<index name="idx_policy_payroll_item" unique="NORMAL" >
+				<column name="policy_code" />
+			</index>
+			<index name="idx_policy_payroll_item_0" unique="NORMAL" >
+				<column name="payroll_item_code" />
+			</index>
+			<fk name="fk_policy_payroll_item_policy_code" to_schema="hris" to_table="policy" >
+				<fk_column name="policy_code" pk="code" />
+			</fk>
+			<fk name="fk_policy_payroll_item_code" to_schema="payroll" to_table="payroll_item" >
+				<fk_column name="payroll_item_code" pk="code" />
+			</fk>
+		</table>
+		<table name="position" >
+			<column name="code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="display_name" type="varchar" length="100" jt="12" />
+			<column name="position_level_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="parent_code" type="varchar" length="30" jt="12" />
+			<index name="pk_position" unique="PRIMARY_KEY" >
+				<column name="code" />
+			</index>
+			<index name="idx_position_name" unique="UNIQUE" >
+				<column name="display_name" />
+			</index>
+			<index name="idx_position" unique="NORMAL" >
+				<column name="position_level_code" />
+			</index>
+			<index name="idx_position_0" unique="NORMAL" >
+				<column name="parent_code" />
+			</index>
+			<fk name="fk_position_level_code" to_schema="hris" to_table="position_level" >
+				<fk_column name="position_level_code" pk="code" />
+			</fk>
+			<fk name="fk_position_parent_code" to_schema="hris" to_table="position" >
+				<fk_column name="parent_code" pk="code" />
+			</fk>
+		</table>
+		<table name="position_level" >
+			<column name="code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="display_name" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="level" type="integer" jt="4" mandatory="y" />
+			<index name="pk_position_level" unique="PRIMARY_KEY" >
+				<column name="code" />
+			</index>
+		</table>
+		<table name="shift" >
+			<column name="code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="display_name" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="scheduled_in" type="time" jt="92" mandatory="y" />
+			<column name="scheduled_out" type="time" jt="92" mandatory="y" />
+			<column name="shift_differential_start" type="time" jt="92" />
+			<column name="shift_differential_end" type="time" jt="92" />
+			<column name="forced_break_minutes" type="integer" jt="4" mandatory="y" >
+				<defo>60</defo>
+			</column>
+			<column name="calendar_color" type="varchar" length="20" jt="12" />
+			<index name="pk_shift" unique="PRIMARY_KEY" >
+				<column name="code" />
+			</index>
+		</table>
+		<table name="work_schedule" >
+			<column name="code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="display_name" type="varchar" length="100" jt="12" mandatory="y" />
+			<index name="pk_work_schedule" unique="PRIMARY_KEY" >
+				<column name="code" />
+			</index>
+			<index name="idx_work_schedule" unique="UNIQUE" >
+				<column name="display_name" />
+			</index>
+		</table>
+		<table name="work_schedule_shift" >
+			<column name="work_schedule_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="shift_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="week_day" type="integer" jt="4" mandatory="y" >
+				<defo>1</defo>
+				<comment><![CDATA[1 (sunday) -> 7 (saturday)]]></comment>
+			</column>
+			<index name="pk_work_schedule_shift" unique="PRIMARY_KEY" >
+				<column name="work_schedule_code" />
+				<column name="shift_code" />
+				<column name="week_day" />
+			</index>
+			<index name="idx_work_schedule_shift" unique="NORMAL" >
+				<column name="work_schedule_code" />
+			</index>
+			<index name="idx_work_schedule_shift_0" unique="NORMAL" >
+				<column name="shift_code" />
+			</index>
+			<fk name="fk_work_schedule_shift_work_schedule_code" to_schema="hris" to_table="work_schedule" >
+				<fk_column name="work_schedule_code" pk="code" />
+			</fk>
+			<fk name="fk_work_schedule_shift_code" to_schema="hris" to_table="shift" >
+				<fk_column name="shift_code" pk="code" />
+			</fk>
+		</table>
+	</schema>
+	<schema name="payroll" schemaname="payroll" >
+		<table name="annual_tax_table" >
+			<column name="id" type="bigserial" jt="-5" mandatory="y" />
+			<column name="over_amount" type="numeric" length="10" decimal="2" jt="2" mandatory="y" />
+			<column name="under_amount" type="numeric" length="10" decimal="2" jt="2" mandatory="y" />
+			<column name="tax_due" type="numeric" length="10" decimal="2" jt="2" mandatory="y" />
+			<column name="tax_due_percent_of_excess" type="integer" jt="4" mandatory="y" />
+			<index name="pk_bir_annual_salary_tax_table" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="chrono_log" >
+			<column name="employee_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="entry_date" type="date" jt="91" mandatory="y" />
+			<column name="time_in" type="time" jt="92" mandatory="y" >
+				<defo>(&#039;now&#039;::text)::time with time zone</defo>
+			</column>
+			<column name="time_out" type="time" jt="92" mandatory="y" />
+			<column name="break_time_in_1" type="time" jt="92" />
+			<column name="break_time_out_1" type="time" jt="92" />
+			<index name="pk_chrono_log" unique="PRIMARY_KEY" >
+				<column name="employee_code" />
+				<column name="entry_date" />
+			</index>
+			<index name="idx_chrono_log" unique="NORMAL" >
+				<column name="employee_code" />
+			</index>
+			<fk name="fk_chrono_log_employee_code" to_schema="hris" to_table="employee" >
+				<fk_column name="employee_code" pk="code" />
+			</fk>
+		</table>
+		<table name="chrono_log_for_correction" >
+			<column name="employee_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="entry_date" type="date" jt="91" mandatory="y" />
+			<column name="corrections_required" type="json" jt="2000" mandatory="y" />
+			<index name="pk_chrono_log_for_correction" unique="PRIMARY_KEY" >
+				<column name="employee_code" />
+				<column name="entry_date" />
+			</index>
+			<index name="idx_chrono_log_for_correction" unique="NORMAL" >
+				<column name="employee_code" />
+			</index>
+			<fk name="fk_chrono_log_for_correction_employee_code" to_schema="hris" to_table="employee" >
+				<fk_column name="employee_code" pk="code" />
+			</fk>
+		</table>
+		<table name="employee_overtime_summary" >
+			<comment><![CDATA[ROT, RDOT, HOT, SHOT, RDHOT, RDSHOT, and (night) differential counterparts postfixed by _D (ex. ROT_D)]]></comment>
+			<column name="employee_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="payroll_pay_date" type="date" jt="91" mandatory="y" />
+			<column name="overtime_type_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="minutes_worked" type="integer" jt="4" mandatory="y" />
+			<index name="pk_night_differential_summary" unique="PRIMARY_KEY" >
+				<column name="employee_code" />
+			</index>
+			<index name="idx_overtime_summary" unique="NORMAL" >
+				<column name="payroll_pay_date" />
+			</index>
+			<fk name="fk_overtime_summary_employee_code" to_schema="hris" to_table="employee" >
+				<fk_column name="employee_code" pk="code" />
+			</fk>
+		</table>
+		<table name="employee_payroll_summary" >
+			<column name="employee_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="payroll_pay_date" type="date" jt="91" mandatory="y" />
+			<column name="monthly_rate" type="numeric" length="10" decimal="2" jt="2" mandatory="y" />
+			<column name="semi_monthly_rate" type="numeric" length="10" decimal="6" jt="2" mandatory="y" />
+			<column name="daily_rate" type="numeric" length="10" decimal="6" jt="2" />
+			<column name="hourly_rate" type="numeric" length="10" decimal="6" jt="2" mandatory="y" />
+			<column name="minute_rate" type="numeric" length="10" decimal="6" jt="2" mandatory="y" />
+			<column name="working_day_count" type="integer" jt="4" mandatory="y" />
+			<column name="present_day_count" type="integer" jt="4" mandatory="y" />
+			<column name="absent_day_count" type="integer" jt="4" mandatory="y" />
+			<column name="half_day_absent_count" type="integer" jt="4" mandatory="y" />
+			<column name="minutes_late" type="integer" jt="4" mandatory="y" />
+			<index name="pk_employee_payroll_summary" unique="PRIMARY_KEY" >
+				<column name="employee_code" />
+				<column name="payroll_pay_date" />
+			</index>
+			<index name="idx_employee_payroll_summary" unique="NORMAL" >
+				<column name="payroll_pay_date" />
+			</index>
+			<index name="idx_employee_payroll_summary_0" unique="NORMAL" >
+				<column name="employee_code" />
+			</index>
+			<fk name="fk_employee_payroll_summary_employee_code" to_schema="hris" to_table="employee" >
+				<fk_column name="employee_code" pk="code" />
+			</fk>
+		</table>
+		<table name="monthly_tax_table" >
+			<column name="id" type="bigserial" jt="-5" mandatory="y" />
+			<column name="tax_category_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="payroll_type_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="over_amount" type="numeric" length="10" decimal="2" jt="2" mandatory="y" />
+			<column name="under_amount" type="numeric" length="10" decimal="2" jt="2" mandatory="y" />
+			<column name="tax_due" type="numeric" length="10" decimal="2" jt="2" mandatory="y" />
+			<column name="tax_due_percent_of_excess" type="integer" jt="4" mandatory="y" />
+			<index name="pk_bir_annual_salary_tax_table_0" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="idx_bir_monthly_salary_tax_table" unique="NORMAL" >
+				<column name="tax_category_code" />
+			</index>
+			<index name="idx_monthly_salary_tax_table" unique="NORMAL" >
+				<column name="payroll_type_code" />
+			</index>
+			<fk name="fk_monthly_salary_tax_table_tax_category_code" to_schema="payroll" to_table="tax_category" >
+				<fk_column name="tax_category_code" pk="code" />
+			</fk>
+			<fk name="fk_monthly_tax_table_payroll_type_code" to_schema="payroll" to_table="payroll_type" >
+				<fk_column name="payroll_type_code" pk="code" />
+			</fk>
+		</table>
+		<table name="payroll" >
+			<column name="pay_date" type="date" jt="91" mandatory="y" >
+				<defo>(&#039;now&#039;::text)::date</defo>
+			</column>
+			<column name="pay_period_uom" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="is_open" type="bool" jt="-7" mandatory="y" >
+				<defo>true</defo>
+			</column>
+			<column name="cutoff_start" type="date" jt="91" mandatory="y" />
+			<column name="cutoff_end" type="date" jt="91" mandatory="y" />
+			<column name="include_deductibles" type="bool" jt="-7" mandatory="y" >
+				<defo>false</defo>
+			</column>
+			<column name="approved_by" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="prepared_by" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="received_by" type="varchar" length="100" jt="12" mandatory="y" />
+			<index name="pk_payroll" unique="PRIMARY_KEY" >
+				<column name="pay_date" />
+				<column name="pay_period_uom" />
+			</index>
+			<index name="pk_payroll_0" unique="UNIQUE" >
+				<column name="pay_date" />
+			</index>
+			<index name="pk_payroll_1" unique="UNIQUE" >
+				<column name="pay_period_uom" />
+			</index>
+		</table>
+		<table name="payroll_entry" >
+			<column name="payroll_pay_date" type="date" jt="91" mandatory="y" />
+			<column name="pay_period_uom" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="employee_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="payroll_item_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="payroll_generated" type="bool" jt="-7" mandatory="y" >
+				<defo>false</defo>
+			</column>
+			<column name="qty" type="numeric" length="10" decimal="4" jt="2" mandatory="y" />
+			<column name="amount" type="numeric" length="10" decimal="4" jt="2" mandatory="y" />
+			<column name="remarks" type="varchar" length="100" jt="12" />
+			<index name="idx_payroll_entry" unique="NORMAL" >
+				<column name="payroll_pay_date" />
+			</index>
+			<index name="idx_payroll_entry_0" unique="NORMAL" >
+				<column name="employee_code" />
+			</index>
+			<index name="idx_payroll_entry_1" unique="NORMAL" >
+				<column name="payroll_item_code" />
+			</index>
+			<index name="pk_payroll_entry" unique="PRIMARY_KEY" >
+				<column name="payroll_pay_date" />
+				<column name="pay_period_uom" />
+				<column name="employee_code" />
+				<column name="payroll_item_code" />
+			</index>
+			<index name="idx_payroll_entry_2" unique="NORMAL" >
+				<column name="pay_period_uom" />
+			</index>
+			<fk name="fk_payroll_entry_employee_code" to_schema="hris" to_table="employee" >
+				<fk_column name="employee_code" pk="code" />
+			</fk>
+			<fk name="fk_payroll_entry_item_code" to_schema="payroll" to_table="payroll_item" >
+				<fk_column name="payroll_item_code" pk="code" />
+			</fk>
+			<fk name="fk_payroll_entry_pay_date" to_schema="payroll" to_table="payroll" >
+				<fk_column name="payroll_pay_date" pk="pay_date" />
+			</fk>
+			<fk name="fk_payroll_entry_period_uom" to_schema="payroll" to_table="payroll" >
+				<fk_column name="pay_period_uom" pk="pay_period_uom" />
+			</fk>
+		</table>
+		<table name="payroll_item" >
+			<column name="code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="display_name" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="type_code" type="varchar" length="2" jt="12" mandatory="y" >
+				<comment><![CDATA[(D)eduction or (E)arnings]]></comment>
+			</column>
+			<column name="computation_uom" type="varchar" length="4" jt="12" mandatory="y" >
+				<defo>&#039;MIN&#039;</defo>
+				<comment><![CDATA[UOM = Unit of Measurement: (MON)Month, (DAY)Day,  (HDAY)Half Day, (HR)Hour, (MIN) Minute, (EA) Exact Amount]]></comment>
+			</column>
+			<column name="payslip_display_name" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="is_employee_amount_required" type="bool" jt="-7" mandatory="y" >
+				<defo>true</defo>
+			</column>
+			<column name="amount_dependent_on_variable" type="varchar" length="30" jt="12" >
+				<comment><![CDATA[Any columns from employee_payroll_summary table]]></comment>
+			</column>
+			<column name="qty_dependent_on_variable" type="varchar" jt="12" >
+				<comment><![CDATA[Any columns from employee_payroll_summary table]]></comment>
+			</column>
+			<column name="system_reserved" type="bool" length="100" jt="-7" mandatory="y" >
+				<defo>false</defo>
+			</column>
+			<column name="taxable" type="bool" jt="-7" mandatory="y" >
+				<defo>true</defo>
+			</column>
+			<column name="multiplier" type="numeric" length="10" decimal="4" jt="2" >
+				<defo>1</defo>
+			</column>
+			<column name="divider" type="numeric" length="10" decimal="4" jt="2" >
+				<defo>1</defo>
+			</column>
+			<column name="created_at" type="timestamp" jt="93" />
+			<column name="updated_at" type="timestamp" jt="93" />
+			<index name="pk_payroll_item" unique="PRIMARY_KEY" >
+				<column name="code" />
+			</index>
+			<index name="idx_payroll_item_name" unique="UNIQUE" >
+				<column name="display_name" />
+			</index>
+		</table>
+		<table name="payroll_payment_method" >
+			<column name="employee_code" type="varchar" length="30" decimal="0" jt="12" mandatory="y" />
+			<column name="payment_method_code" type="char" length="2" decimal="0" jt="1" mandatory="y" >
+				<comment><![CDATA[(C) cash, (B) Bank Deposit]]></comment>
+			</column>
+			<column name="bank_code" type="varchar" length="30" decimal="0" jt="12" />
+			<column name="account_no" type="varchar" length="100" decimal="0" jt="12" />
+			<index name="pk_payrol_payment_method" unique="PRIMARY_KEY" >
+				<column name="employee_code" />
+			</index>
+			<index name="idx_payroll_payment_method" unique="NORMAL" >
+				<column name="bank_code" />
+			</index>
+			<fk name="fk_payroll_payment_method_bank_code" to_schema="public" to_table="bank" >
+				<fk_column name="bank_code" pk="code" />
+			</fk>
+			<fk name="fk_payroll_payment_method_employee_code" to_schema="hris" to_table="employee" >
+				<fk_column name="employee_code" pk="code" />
+			</fk>
+		</table>
+		<table name="payroll_type" >
+			<column name="code" type="varchar" length="30" decimal="0" jt="12" mandatory="y" />
+			<column name="display_name" type="varchar" length="100" decimal="0" jt="12" mandatory="y" />
+			<index name="pk_payroll_type" unique="PRIMARY_KEY" >
+				<column name="code" />
+			</index>
+			<index name="idx_payroll_type_name" unique="UNIQUE" >
+				<column name="display_name" />
+			</index>
+		</table>
+		<table name="philhealth_table" >
+			<column name="salary_bracket_id" type="bigserial" jt="-5" mandatory="y" />
+			<column name="salary_range_from" type="numeric" length="10" decimal="2" jt="2" mandatory="y" />
+			<column name="salary_range_to" type="numeric" length="10" decimal="2" jt="2" mandatory="y" />
+			<column name="total_contribution" type="numeric" length="10" decimal="2" jt="2" mandatory="y" />
+			<column name="employer_share" type="numeric" length="10" decimal="2" jt="2" mandatory="y" />
+			<column name="employee_share" type="numeric" length="10" decimal="2" jt="2" mandatory="y" />
+			<index name="pk_philhealth_tabe" unique="PRIMARY_KEY" >
+				<column name="salary_bracket_id" />
+			</index>
+		</table>
+		<table name="sss_table" >
+			<column name="salary_bracket_id" type="bigserial" jt="-5" mandatory="y" />
+			<column name="salary_range_from" type="numeric" length="10" decimal="2" jt="2" mandatory="y" />
+			<column name="salary_range_to" type="numeric" length="10" decimal="2" jt="2" mandatory="y" />
+			<column name="monthly_salary_credit" type="numeric" length="10" decimal="2" jt="2" />
+			<column name="employees_compensation" type="numeric" length="10" decimal="2" jt="2" mandatory="y" >
+				<defo>10</defo>
+			</column>
+			<column name="employer_share" type="numeric" length="10" decimal="2" jt="2" mandatory="y" />
+			<column name="employee_share" type="numeric" length="10" decimal="2" jt="2" mandatory="y" />
+			<column name="total_contribution" type="numeric" length="10" decimal="2" jt="2" mandatory="y" />
+			<index name="pk_sss_table" unique="PRIMARY_KEY" >
+				<column name="salary_bracket_id" />
+			</index>
+		</table>
+		<table name="tax_category" >
+			<column name="code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="display_name" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="annual_exemption_amount" type="numeric" length="10" decimal="2" jt="2" mandatory="y" >
+				<defo>0</defo>
+			</column>
+			<index name="pk_tax_category" unique="PRIMARY_KEY" >
+				<column name="code" />
+			</index>
+		</table>
+		<sequence name="annual_tax_table_id_seq" start="1" />
+		<sequence name="monthly_tax_table_id_seq" start="1" />
+		<sequence name="philhealth_table_salary_bracket_id_seq" start="1" />
+		<sequence name="seq_annual_salary_tax_table" start="1" />
+		<sequence name="seq_monthly_tax_table_id" start="1" />
+		<sequence name="seq_philhealth_table_id" start="1" />
+		<sequence name="seq_sss_table_id" start="1" />
+		<sequence name="sss_table_salary_bracket_id_seq" start="1" />
+	</schema>
+	<schema name="public" schemaname="public" >
+		<table name="bank" >
+			<column name="code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="display_name" type="varchar" length="100" jt="12" mandatory="y" />
+			<index name="pk_bank_account" unique="PRIMARY_KEY" >
+				<column name="code" />
+			</index>
+			<index name="idx_bank_account" unique="UNIQUE" >
+				<column name="display_name" />
+			</index>
+		</table>
+		<table name="city" >
+			<column name="code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="region_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="display_name" type="varchar" length="100" jt="12" mandatory="y" />
+			<index name="pk_city" unique="PRIMARY_KEY" >
+				<column name="code" />
+			</index>
+			<index name="idx_city" unique="NORMAL" >
+				<column name="region_code" />
+			</index>
+			<fk name="fk_city_region" to_schema="public" to_table="region" >
+				<fk_column name="region_code" pk="code" />
+			</fk>
+		</table>
+		<table name="company" >
+			<column name="code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="display_name" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="address" type="text" length="100" jt="12" />
+			<column name="created_at" type="timestamp" jt="93" />
+			<column name="updated_at" type="timestamp" jt="93" />
+			<index name="pk_company" unique="PRIMARY_KEY" >
+				<column name="code" />
+			</index>
+			<index name="idx_company_name" unique="UNIQUE" >
+				<column name="display_name" />
+			</index>
+		</table>
+		<table name="cost_profit_center" >
+			<column name="code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="display_name" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="company_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="created_at" type="timestamp" jt="93" />
+			<column name="updated_at" type="timestamp" jt="93" />
+			<index name="pk_cost_center" unique="PRIMARY_KEY" >
+				<column name="code" />
+			</index>
+			<index name="idx_cost_center_name" unique="UNIQUE" >
+				<column name="display_name" />
+			</index>
+			<index name="idx_cost_center" unique="NORMAL" >
+				<column name="company_code" />
+			</index>
+			<fk name="fk_cost_center_company_code" to_schema="public" to_table="company" >
+				<fk_column name="company_code" pk="code" />
+			</fk>
+		</table>
+		<table name="location" >
+			<column name="code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="display_name" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="city_code" type="varchar" length="30" jt="12" />
+			<column name="company_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="cost_profit_center_code" type="varchar" length="30" jt="12" />
+			<column name="created_at" type="timestamp" jt="93" />
+			<column name="updated_at" type="timestamp" jt="93" />
+			<index name="pk_location" unique="PRIMARY_KEY" >
+				<column name="code" />
+			</index>
+			<index name="idx_location" unique="UNIQUE" >
+				<column name="display_name" />
+			</index>
+			<index name="idx_location_1" unique="NORMAL" >
+				<column name="company_code" />
+			</index>
+			<index name="idx_location_0" unique="NORMAL" >
+				<column name="cost_profit_center_code" />
+			</index>
+			<index name="idx_location_2" unique="NORMAL" >
+				<column name="city_code" />
+			</index>
+			<fk name="fk_location_company_code" to_schema="public" to_table="company" delete_action="cascade" update_action="cascade" >
+				<fk_column name="company_code" pk="code" />
+			</fk>
+			<fk name="fk_location_cc_code" to_schema="public" to_table="cost_profit_center" >
+				<fk_column name="cost_profit_center_code" pk="code" />
+			</fk>
+			<fk name="fk_location_city" to_schema="public" to_table="city" >
+				<fk_column name="city_code" pk="code" />
+			</fk>
+		</table>
+		<table name="module" >
+			<column name="code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="display_name" type="varchar" length="100" jt="12" mandatory="y" />
+			<index name="pk_module" unique="PRIMARY_KEY" >
+				<column name="code" />
+			</index>
+			<index name="idx_module_name" unique="UNIQUE" >
+				<column name="display_name" />
+			</index>
+		</table>
+		<table name="number_series" >
+			<column name="code" type="varchar" length="12" jt="12" mandatory="y" />
+			<column name="module_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="starting_number" type="integer" jt="4" mandatory="y" >
+				<defo>0</defo>
+			</column>
+			<column name="ending_number" type="integer" jt="4" mandatory="y" >
+				<defo>99999</defo>
+			</column>
+			<column name="last_number_used" type="integer" jt="4" mandatory="y" >
+				<defo>0</defo>
+			</column>
+			<column name="effective_date" type="date" jt="91" mandatory="y" >
+				<defo>(&#039;now&#039;::text)::date</defo>
+			</column>
+			<column name="created_at" type="timestamp" jt="93" />
+			<column name="updated_at" type="timestamp" jt="93" />
+			<index name="pk_number_series" unique="PRIMARY_KEY" >
+				<column name="code" />
+			</index>
+			<index name="idx_number_series" unique="NORMAL" >
+				<column name="module_code" />
+			</index>
+			<fk name="fk_number_series_module_code" to_schema="public" to_table="module" >
+				<fk_column name="module_code" pk="code" />
+			</fk>
+		</table>
+		<table name="region" >
+			<column name="code" type="varchar" length="32" jt="12" mandatory="y" />
+			<column name="display_name" type="varchar" length="100" jt="12" />
+			<index name="pk_region" unique="PRIMARY_KEY" >
+				<column name="code" />
+			</index>
+		</table>
+		<table name="user_account" >
+			<column name="username" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="is_active" type="bool" jt="-7" >
+				<defo>true</defo>
+			</column>
+			<column name="display_name" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="password" type="varchar" length="120" jt="12" mandatory="y" />
+			<column name="location_full_access" type="bool" jt="-7" mandatory="y" >
+				<defo>false</defo>
+			</column>
+			<column name="remember_token" type="varchar" length="120" jt="12" />
+			<column name="created_at" type="timestamp" jt="93" />
+			<column name="updated_at" type="timestamp" jt="93" />
+			<index name="pk_user_account" unique="PRIMARY_KEY" >
+				<column name="username" />
+			</index>
+		</table>
+		<table name="user_location" >
+			<column name="username" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="location_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="is_default" type="bool" jt="-7" mandatory="y" >
+				<defo>false</defo>
+			</column>
+			<index name="pk_user_location" unique="PRIMARY_KEY" >
+				<column name="username" />
+				<column name="location_code" />
+			</index>
+			<index name="idx_user_location" unique="NORMAL" >
+				<column name="username" />
+			</index>
+			<index name="idx_user_location_0" unique="NORMAL" >
+				<column name="location_code" />
+			</index>
+			<fk name="fk_user_location_username" to_schema="public" to_table="user_account" >
+				<fk_column name="username" pk="username" />
+			</fk>
+			<fk name="fk_user_location_code" to_schema="public" to_table="location" >
+				<fk_column name="location_code" pk="code" />
+			</fk>
+		</table>
+	</schema>
+	<schema name="security" schemaname="security" >
+		<table name="access_control" >
+			<column name="code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="level" type="smallint" jt="5" mandatory="y" >
+				<defo>1</defo>
+				<comment><![CDATA[1 = viewer
+2 = creation/editing/deleting of own documents
+3 = creation/editing/deleting of all documents accessible to user]]></comment>
+			</column>
+			<column name="display_name" type="varchar" length="100" jt="12" mandatory="y" />
+			<index name="pk_access_control" unique="PRIMARY_KEY" >
+				<column name="code" />
+			</index>
+			<index name="idx_access_control_name" unique="UNIQUE" >
+				<column name="display_name" />
+			</index>
+		</table>
+		<table name="access_control_0" >
+			<column name="code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="display_name" type="varchar" length="100" jt="12" mandatory="y" />
+			<index name="pk_access_control_0" unique="PRIMARY_KEY" >
+				<column name="code" />
+			</index>
+			<index name="idx_access_control_name_0" unique="UNIQUE" >
+				<column name="display_name" />
+			</index>
+		</table>
+		<table name="access_control_list" >
+			<column name="role_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="module_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="access_control_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<index name="pk_access_control_list" unique="PRIMARY_KEY" >
+				<column name="role_code" />
+				<column name="module_code" />
+				<column name="access_control_code" />
+			</index>
+			<index name="idx_access_control_list" unique="NORMAL" >
+				<column name="role_code" />
+			</index>
+			<index name="idx_access_control_list_0" unique="NORMAL" >
+				<column name="access_control_code" />
+			</index>
+			<index name="idx_access_control_list_1" unique="NORMAL" >
+				<column name="module_code" />
+			</index>
+			<fk name="fk_access_control_list_role_code" to_schema="security" to_table="role" >
+				<fk_column name="role_code" pk="code" />
+			</fk>
+			<fk name="fk_access_control_list_access_control_code" to_schema="security" to_table="access_control" >
+				<fk_column name="access_control_code" pk="code" />
+			</fk>
+			<fk name="fk_access_control_list_module_code" to_schema="public" to_table="module" >
+				<fk_column name="module_code" pk="code" />
+			</fk>
+		</table>
+		<table name="role" >
+			<column name="code" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="display_name" type="varchar" length="100" jt="12" mandatory="y" />
+			<index name="pk_role" unique="PRIMARY_KEY" >
+				<column name="code" />
+			</index>
+			<index name="idx_role_name" unique="UNIQUE" >
+				<column name="display_name" />
+			</index>
+		</table>
+		<table name="user_role" >
+			<column name="username" type="varchar" length="30" jt="12" mandatory="y" />
+			<column name="role_code" type="varchar" length="30" jt="12" mandatory="y" />
+			<index name="pk_user_role" unique="PRIMARY_KEY" >
+				<column name="username" />
+				<column name="role_code" />
+			</index>
+			<index name="idx_user_role" unique="NORMAL" >
+				<column name="username" />
+			</index>
+			<index name="idx_user_role_0" unique="NORMAL" >
+				<column name="role_code" />
+			</index>
+			<fk name="fk_user_role_username" to_schema="public" to_table="user_account" >
+				<fk_column name="username" pk="username" />
+			</fk>
+			<fk name="fk_user_role_code" to_schema="security" to_table="role" >
+				<fk_column name="role_code" pk="code" />
+			</fk>
+		</table>
+	</schema>
+	<connector name="Payroll Skarla" database="PostgreSQL" driver_class="org.postgresql.Driver" driver_jar="postgresql-42.0.0.jre6.jar" driver_desc="Standard" host="localhost" port="5432" instance="payroll_skarla" user="postgres" passwd="cG9zdGdyZQ==" />
+	<connector name="Payroll Skarla Test" database="PostgreSQL" driver_class="org.postgresql.Driver" driver_jar="postgresql-42.0.0.jre6.jar" driver_desc="Standard" host="localhost" port="5432" instance="payroll_skarla_test" user="postgres" passwd="cG9zdGdyZQ==" />
+	<layout name="Default Layout" id="Layout_117bdc14" joined_routing="y" show_relation="columns" >
+		<entity schema="security" name="user_role" color="c8daf5" x="60" y="1020" />
+		<entity schema="security" name="role" color="c8daf5" x="60" y="1140" />
+		<entity schema="security" name="access_control_list" color="c8daf5" x="210" y="1140" />
+		<entity schema="hris" name="work_schedule" color="c8daf5" x="630" y="1275" />
+		<entity schema="hris" name="work_schedule_shift" color="c8daf5" x="600" y="1380" />
+		<entity schema="payroll" name="tax_category" color="c8daf5" x="1545" y="495" />
+		<entity schema="hris" name="employee_payroll_item_amount" color="c8daf5" x="1545" y="375" />
+		<entity schema="public" name="bank" color="c8daf5" x="1095" y="705" />
+		<entity schema="payroll" name="monthly_tax_table" color="c8daf5" x="1305" y="930" />
+		<entity schema="payroll" name="annual_tax_table" color="c8daf5" x="1515" y="930" />
+		<entity schema="payroll" name="philhealth_table" color="c8daf5" x="1500" y="1095" />
+		<entity schema="payroll" name="sss_table" color="c8daf5" x="1305" y="1095" />
+		<entity schema="hris" name="shift" color="c8daf5" x="795" y="1380" />
+		<entity schema="hris" name="employee_work_schedule" color="c8daf5" x="795" y="1245" />
+		<entity schema="hris" name="employee_shift_adjustment" color="bcd5f1" x="975" y="1380" />
+		<entity schema="public" name="region" color="bcd5f1" x="750" y="660" />
+		<entity schema="public" name="user_location" color="c8daf5" x="315" y="870" />
+		<entity schema="hris" name="holiday" color="c8daf5" x="390" y="615" />
+		<entity schema="public" name="company" color="c8daf5" x="570" y="1065" />
+		<entity schema="hris" name="position" color="c8daf5" x="765" y="990" />
+		<entity schema="hris" name="position_level" color="c8daf5" x="795" y="1110" />
+		<entity schema="public" name="city" color="bcd5f1" x="750" y="750" />
+		<entity schema="hris" name="holiday_location" color="c8daf5" x="435" y="795" />
+		<entity schema="hris" name="employee" color="c8daf5" x="1005" y="810" />
+		<entity schema="payroll" name="payroll_entry" color="c8daf5" x="1320" y="75" />
+		<entity schema="payroll" name="chrono_log_for_correction" color="bcd5f1" x="630" y="240" />
+		<entity schema="payroll" name="employee_overtime_summary" color="c8daf5" x="615" y="360" />
+		<entity schema="payroll" name="employee_payroll_summary" color="c8daf5" x="915" y="135" />
+		<entity schema="hris" name="policy_payroll_item" color="c8daf5" x="1320" y="285" />
+		<entity schema="payroll" name="payroll_item" color="c8daf5" x="1545" y="75" />
+		<entity schema="payroll" name="payroll" color="c8daf5" x="1095" y="75" />
+		<entity schema="hris" name="policy" color="c8daf5" x="1095" y="285" />
+		<entity schema="payroll" name="payroll_payment_method" color="c8daf5" x="1035" y="495" />
+		<entity schema="payroll" name="payroll_type" color="c8daf5" x="1305" y="525" />
+		<entity schema="payroll" name="chrono_log" color="c8daf5" x="660" y="75" />
+		<entity schema="public" name="module" color="c8daf5" x="255" y="1320" />
+		<entity schema="public" name="number_series" color="c8daf5" x="45" y="1320" />
+		<entity schema="public" name="user_account" color="c8daf5" x="120" y="795" />
+		<entity schema="public" name="location" color="c8daf5" x="570" y="900" />
+		<entity schema="security" name="access_control" color="c8daf5" x="240" y="1020" />
+		<group name="Schema: Security" color="f9e9f0" >
+			<entity schema="security" name="access_control" />
+			<entity schema="security" name="access_control_list" />
+			<entity schema="security" name="role" />
+			<entity schema="security" name="user_role" />
+		</group>
+		<group name="Group: Computation Tables" color="cfd8ea" >
+			<entity schema="payroll" name="annual_tax_table" />
+			<entity schema="payroll" name="monthly_tax_table" />
+			<entity schema="payroll" name="philhealth_table" />
+			<entity schema="payroll" name="sss_table" />
+		</group>
+		<group name="Schema: HRIS,Payroll | Group: Payroll Configuration" color="bdc5ec" >
+			<entity schema="hris" name="employee_payroll_item_amount" />
+			<entity schema="payroll" name="payroll" />
+			<entity schema="payroll" name="payroll_entry" />
+			<entity schema="payroll" name="payroll_item" />
+			<entity schema="hris" name="policy" />
+			<entity schema="hris" name="policy_payroll_item" />
+			<entity schema="payroll" name="tax_category" />
+			<entity schema="payroll" name="employee_payroll_summary" />
+			<entity schema="payroll" name="chrono_log" />
+			<entity schema="payroll" name="employee_overtime_summary" />
+			<entity schema="payroll" name="chrono_log_for_correction" />
+			<entity schema="payroll" name="payroll_payment_method" />
+		</group>
+		<group name="Schema: HRIS | Group: Work Schedule Setup" color="c5d1f7" >
+			<entity schema="hris" name="employee_work_schedule" />
+			<entity schema="hris" name="shift" />
+			<entity schema="hris" name="work_schedule" />
+			<entity schema="hris" name="work_schedule_shift" />
+			<entity schema="hris" name="employee_shift_adjustment" />
+		</group>
+		<group name="Group: System" color="c4e0f9" >
+			<entity schema="public" name="module" />
+			<entity schema="public" name="number_series" />
+		</group>
+		<script name="Sql" id="Query_fa2149f" language="SQL" >
+			<string><![CDATA[CREATE SCHEMA hris;
+
+CREATE SCHEMA payroll;
+
+CREATE SCHEMA "public";
+
+CREATE SCHEMA "security";
+
+CREATE SEQUENCE payroll.seq_annual_salary_tax_table START WITH 1;
+
+CREATE SEQUENCE payroll.seq_monthly_tax_table_id START WITH 1;
+
+CREATE SEQUENCE payroll.seq_philhealth_table_id START WITH 1;
+
+CREATE SEQUENCE payroll.seq_sss_table_id START WITH 1;
+
+CREATE TABLE hris.employee ( 
+	code                 varchar(30)  NOT NULL,
+	is_active            bool DEFAULT true NOT NULL,
+	location_code        varchar(30)  NOT NULL,
+	policy_code          varchar(30)  NOT NULL,
+	position_code        varchar(30)  NOT NULL,
+	tax_category_code    varchar(30)  NOT NULL,
+	email                varchar(30)  NOT NULL,
+	first_name           varchar(100)  NOT NULL,
+	middle_name          varchar(100)  ,
+	last_name            varchar(100)  NOT NULL,
+	address              text  ,
+	birth_date           date  ,
+	gender_code          char(2) DEFAULT M NOT NULL,
+	civil_status_code    char(2) DEFAULT S NOT NULL,
+	contact_number_1     varchar(20)  ,
+	contact_number_2     varchar(20)  ,
+	basic_salary         numeric(10,4)  NOT NULL,
+	basic_salary_uom     char(4) DEFAULT MON NOT NULL,
+	date_hired           date  ,
+	create_at            timestamp  ,
+	updated_at           timestamp  ,
+	CONSTRAINT pk_employee PRIMARY KEY ( code ),
+	CONSTRAINT fk_employee_location_code FOREIGN KEY ( location_code ) REFERENCES "public"."location"( code )    ,
+	CONSTRAINT fk_employee_tax_category_code FOREIGN KEY ( tax_category_code ) REFERENCES payroll.tax_category( code )    
+ );
+
+CREATE INDEX idx_employee ON hris.employee ( location_code );
+
+CREATE INDEX idx_employee_0 ON hris.employee ( tax_category_code );
+
+COMMENT ON COLUMN hris.employee.basic_salary_uom IS 'UOM = Unit of Measurement: (MON)Month, (DAY)Day, (HR)Hour, (MIN) Minute, (EA) Exact Amount';
+
+CREATE TABLE hris.employee_payroll_item_amount ( 
+	employee_code        varchar(30)  NOT NULL,
+	payroll_item_code    varchar(30)  NOT NULL,
+	amount               numeric(10,4)  NOT NULL,
+	CONSTRAINT pk_employee_payroll_item_amount PRIMARY KEY ( employee_code, payroll_item_code ),
+	CONSTRAINT fk_employee_payroll_item_amount_employee_code FOREIGN KEY ( employee_code ) REFERENCES hris.employee( code )    ,
+	CONSTRAINT fk_employee_payroll_item_amount_payroll_item_code FOREIGN KEY ( payroll_item_code ) REFERENCES payroll.payroll_item( code )    
+ );
+
+CREATE INDEX idx_employee_payroll_item_amount ON hris.employee_payroll_item_amount ( employee_code );
+
+CREATE INDEX idx_employee_payroll_item_amount_0 ON hris.employee_payroll_item_amount ( payroll_item_code );
+
+CREATE TABLE hris.holiday ( 
+	code                 varchar(30)  NOT NULL,
+	is_active            bool  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	holiday_type_code    varchar(30)  NOT NULL,
+	date_start           date DEFAULT current_date NOT NULL,
+	date_end             date DEFAULT current_date NOT NULL,
+	CONSTRAINT pk_holiday PRIMARY KEY ( code )
+ );
+
+CREATE TABLE hris.holiday_location ( 
+	holiday_code         varchar(30)  NOT NULL,
+	location_code        varchar(30)  NOT NULL,
+	CONSTRAINT pk_holiday_location PRIMARY KEY ( holiday_code ),
+	CONSTRAINT fk_holiday_location_holiday_code FOREIGN KEY ( holiday_code ) REFERENCES hris.holiday( code )    ,
+	CONSTRAINT fk_holiday_location_code FOREIGN KEY ( location_code ) REFERENCES "public"."location"( code )    
+ );
+
+CREATE INDEX idx_holiday_location ON hris.holiday_location ( location_code );
+
+CREATE TABLE hris.payroll_payment_method ( 
+	employee_code        varchar(30)  NOT NULL,
+	payment_method_code  char(2)  NOT NULL,
+	bank_code            varchar(30)  ,
+	account_no           varchar(100)  ,
+	CONSTRAINT pk_payrol_payment_method PRIMARY KEY ( employee_code ),
+	CONSTRAINT fk_payroll_payment_method_employee_code FOREIGN KEY ( employee_code ) REFERENCES hris.employee( code )    ,
+	CONSTRAINT fk_payroll_payment_method_bank_code FOREIGN KEY ( bank_code ) REFERENCES "public".bank( code )    
+ );
+
+CREATE INDEX idx_payroll_payment_method ON hris.payroll_payment_method ( bank_code );
+
+COMMENT ON COLUMN hris.payroll_payment_method.payment_method_code IS '(C) cash, (B) Bank Deposit';
+
+CREATE TABLE hris.policy ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	description          text  ,
+	CONSTRAINT pk_policy PRIMARY KEY ( code ),
+	CONSTRAINT idx_policy_name UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE hris.policy_payroll_item ( 
+	policy_code          varchar(30)  NOT NULL,
+	payroll_item_code    varchar(30)  NOT NULL,
+	CONSTRAINT pk_policy_payroll_items PRIMARY KEY ( policy_code, payroll_item_code ),
+	CONSTRAINT fk_policy_payroll_item_policy_code FOREIGN KEY ( policy_code ) REFERENCES hris.policy( code )    ,
+	CONSTRAINT fk_policy_payroll_item_code FOREIGN KEY ( payroll_item_code ) REFERENCES payroll.payroll_item( code )    
+ );
+
+CREATE INDEX idx_policy_payroll_item ON hris.policy_payroll_item ( policy_code );
+
+CREATE INDEX idx_policy_payroll_item_0 ON hris.policy_payroll_item ( payroll_item_code );
+
+CREATE TABLE hris.shift ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	scheduled_in         time  NOT NULL,
+	scheduled_out        time  NOT NULL,
+	forced_break_minutes integer DEFAULT 60 NOT NULL,
+	CONSTRAINT pk_shift PRIMARY KEY ( code )
+ );
+
+CREATE TABLE hris.table_ ( 
+ );
+
+CREATE TABLE hris.work_schedule ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	CONSTRAINT pk_work_schedule PRIMARY KEY ( code ),
+	CONSTRAINT idx_work_schedule UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE hris.work_schedule_shift ( 
+	work_schedule_code   varchar(30)  NOT NULL,
+	shift_code           varchar(30)  NOT NULL,
+	week_day             integer DEFAULT 1 NOT NULL,
+	CONSTRAINT pk_work_schedule_shift PRIMARY KEY ( work_schedule_code, shift_code, week_day ),
+	CONSTRAINT fk_work_schedule_shift_work_schedule_code FOREIGN KEY ( work_schedule_code ) REFERENCES hris.work_schedule( code )    ,
+	CONSTRAINT fk_work_schedule_shift_code FOREIGN KEY ( shift_code ) REFERENCES hris.shift( code )    
+ );
+
+CREATE INDEX idx_work_schedule_shift ON hris.work_schedule_shift ( work_schedule_code );
+
+CREATE INDEX idx_work_schedule_shift_0 ON hris.work_schedule_shift ( shift_code );
+
+COMMENT ON COLUMN hris.work_schedule_shift.week_day IS '1 (sunday) -> 7 (saturday)';
+
+CREATE TABLE hris.employee_work_schedule ( 
+	effective_date       date DEFAULT current_date NOT NULL,
+	employee_code        varchar(30)  NOT NULL,
+	work_schedule_code   varchar(30)  NOT NULL,
+	locked               bool DEFAULT false NOT NULL,
+	CONSTRAINT pk_employee_work_schedule PRIMARY KEY ( employee_code, effective_date ),
+	CONSTRAINT fk_employee_work_schedule_employee_code FOREIGN KEY ( employee_code ) REFERENCES hris.employee( code )    ,
+	CONSTRAINT fk_employee_work_schedule_code FOREIGN KEY ( work_schedule_code ) REFERENCES hris.work_schedule( code )    
+ );
+
+CREATE INDEX idx_employee_work_schedule ON hris.employee_work_schedule ( employee_code );
+
+CREATE INDEX idx_employee_work_schedule_0 ON hris.employee_work_schedule ( work_schedule_code );
+
+CREATE TABLE payroll.annual_salary_tax_table ( 
+	id                   integer  NOT NULL,
+	over_amount          numeric(10,2)  NOT NULL,
+	under_amount         numeric(10,2)  NOT NULL,
+	tax_due              numeric(10,2)  NOT NULL,
+	tax_due_percent_of_excess integer  NOT NULL,
+	CONSTRAINT pk_bir_annual_salary_tax_table PRIMARY KEY ( id )
+ );
+
+CREATE TABLE payroll.payroll ( 
+	pay_period           date DEFAULT current_date NOT NULL,
+	is_open              bool DEFAULT true NOT NULL,
+	cutoff_start         date  NOT NULL,
+	cutoff_end           date  NOT NULL,
+	include_monthly_processable bool DEFAULT false NOT NULL,
+	approved_by          varchar(100)  NOT NULL,
+	prepared_by          varchar(100)  NOT NULL,
+	received_by          varchar(100)  NOT NULL,
+	CONSTRAINT pk_payroll PRIMARY KEY ( pay_period )
+ );
+
+CREATE TABLE payroll.payroll_item ( 
+	code                 varchar(30)  NOT NULL,
+	type_code            char(2)  NOT NULL,
+	computation_uom      char(4) DEFAULT MIN NOT NULL,
+	payslip_display_name varchar(100)  NOT NULL,
+	is_employee_amount_required bool DEFAULT true NOT NULL,
+	dependent_on_variable_code varchar(10)  NOT NULL,
+	system_reserved      bool DEFAULT false NOT NULL,
+	taxable              bool DEFAULT true NOT NULL,
+	CONSTRAINT pk_payroll_item PRIMARY KEY ( code )
+ );
+
+COMMENT ON COLUMN payroll.payroll_item.type_code IS '(D)eduction or (E)arnings';
+
+COMMENT ON COLUMN payroll.payroll_item.computation_uom IS 'UOM = Unit of Measurement: (MON)Month, (DAY)Day, (HR)Hour, (MIN) Minute, (EA) Exact Amount';
+
+COMMENT ON COLUMN payroll.payroll_item.dependent_on_variable_code IS '(SLRY) Salary, (DYPRSNT) No. of Days Present, (DYABS) No. of Days Absent, (LTSUNDT) Lates & Undertime, (HFDYABS) No. of Half Days Absent, (OT) Regular Overtime, (RDOT) Rest Day Overtime, (HOT) Holiday Overtime, (SHOT) Special Holiday Overtime, (RHOT) Rest Day Holiday Overtime, (RSHOT) Rest Day Special Holiday Overtime';
+
+CREATE TABLE payroll.philhealth_table ( 
+	salary_bracket_id    integer  NOT NULL,
+	salary_range_from    numeric(10,2)  NOT NULL,
+	salary_range_to      numeric(10,2)  NOT NULL,
+	total_contribution   numeric(10,2)  NOT NULL,
+	employer_share       numeric(10,2)  NOT NULL,
+	employee_share       numeric(10,2)  NOT NULL,
+	CONSTRAINT pk_philhealth_tabe PRIMARY KEY ( salary_bracket_id )
+ );
+
+CREATE TABLE payroll.sss_table ( 
+	salary_bracket_id    integer  NOT NULL,
+	salary_range_from    numeric(10,2)  NOT NULL,
+	salary_range_to      numeric(10,2)  NOT NULL,
+	total_contribution   numeric(10,2)  NOT NULL,
+	employer_share       numeric(10,2)  NOT NULL,
+	employee_share       numeric(10,2)  NOT NULL,
+	CONSTRAINT pk_sss_table PRIMARY KEY ( salary_bracket_id )
+ );
+
+CREATE TABLE payroll.tax_category ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	annual_exemption_amount numeric(10,2) DEFAULT 0 NOT NULL,
+	CONSTRAINT pk_tax_category PRIMARY KEY ( code )
+ );
+
+CREATE TABLE payroll.monthly_salary_tax_table ( 
+	id                   integer  NOT NULL,
+	tax_category_code    varchar(30)  NOT NULL,
+	over_amount          numeric(10,2)  NOT NULL,
+	under_amount         numeric(10,2)  NOT NULL,
+	tax_due              numeric(10,2)  NOT NULL,
+	tax_due_percent_of_excess integer  NOT NULL,
+	CONSTRAINT pk_bir_annual_salary_tax_table_0 PRIMARY KEY ( id ),
+	CONSTRAINT fk_monthly_salary_tax_table_tax_category_code FOREIGN KEY ( tax_category_code ) REFERENCES payroll.tax_category( code )    
+ );
+
+CREATE INDEX idx_bir_monthly_salary_tax_table ON payroll.monthly_salary_tax_table ( tax_category_code );
+
+CREATE TABLE payroll.payroll_entry ( 
+	payroll_pay_period   date  NOT NULL,
+	employee_code        varchar(30)  NOT NULL,
+	payroll_item_code    varchar(30)  NOT NULL,
+	payroll_generated    bool DEFAULT false NOT NULL,
+	qty                  numeric(10,4)  NOT NULL,
+	amount               numeric(10,4)  NOT NULL,
+	remarks              varchar(100)  ,
+	CONSTRAINT pk_payroll_entry PRIMARY KEY ( payroll_pay_period, employee_code, payroll_item_code ),
+	CONSTRAINT fk_payroll_entry_pay_period FOREIGN KEY ( payroll_pay_period ) REFERENCES payroll.payroll( pay_period )    ,
+	CONSTRAINT fk_payroll_entry_employee_code FOREIGN KEY ( employee_code ) REFERENCES hris.employee( code )    ,
+	CONSTRAINT fk_payroll_entry_item_code FOREIGN KEY ( payroll_item_code ) REFERENCES payroll.payroll_item( code )    
+ );
+
+CREATE INDEX idx_payroll_entry ON payroll.payroll_entry ( payroll_pay_period );
+
+CREATE INDEX idx_payroll_entry_0 ON payroll.payroll_entry ( employee_code );
+
+CREATE INDEX idx_payroll_entry_1 ON payroll.payroll_entry ( payroll_item_code );
+
+CREATE TABLE "public".bank ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	CONSTRAINT pk_bank_account PRIMARY KEY ( code ),
+	CONSTRAINT idx_bank_account UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE "public".company ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	created_at           timestamp  ,
+	updated_at           timestamp  ,
+	CONSTRAINT pk_company PRIMARY KEY ( code ),
+	CONSTRAINT idx_company_name UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE "public"."location" ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	company_code         varchar(30)  NOT NULL,
+	created_at           timestamp  ,
+	updated_at           timestamp  ,
+	CONSTRAINT pk_location PRIMARY KEY ( code ),
+	CONSTRAINT idx_location UNIQUE ( display_name ) ,
+	CONSTRAINT fk_location_company_code FOREIGN KEY ( company_code ) REFERENCES "public".company( code ) ON DELETE CASCADE ON UPDATE CASCADE
+ );
+
+CREATE INDEX idx_location_1 ON "public"."location" ( company_code );
+
+CREATE TABLE "public"."module" ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	CONSTRAINT pk_module PRIMARY KEY ( code ),
+	CONSTRAINT idx_module_name UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE "public".number_series ( 
+	code                 varchar(12)  NOT NULL,
+	module_code          varchar(30)  NOT NULL,
+	starting_number      integer DEFAULT 0 NOT NULL,
+	ending_number        integer DEFAULT 99999 NOT NULL,
+	last_number_used     integer DEFAULT 0 NOT NULL,
+	effective_date       date DEFAULT current_date NOT NULL,
+	created_at           timestamp  ,
+	updated_at           timestamp  ,
+	CONSTRAINT pk_number_series PRIMARY KEY ( code ),
+	CONSTRAINT fk_number_series_module_code FOREIGN KEY ( module_code ) REFERENCES "public"."module"( code )    
+ );
+
+CREATE INDEX idx_number_series ON "public".number_series ( module_code );
+
+CREATE TABLE "public".user_account ( 
+	username             varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	default_location_code varchar(30)  ,
+	"password"           varchar(120)  NOT NULL,
+	remember_token       varchar(120)  ,
+	created_at           timestamp  ,
+	updated_at           timestamp  ,
+	CONSTRAINT pk_user_account PRIMARY KEY ( username ),
+	CONSTRAINT fk_user_account_location_code FOREIGN KEY ( default_location_code ) REFERENCES "public"."location"( code )    
+ );
+
+CREATE INDEX idx_user_account ON "public".user_account ( default_location_code );
+
+CREATE TABLE "security".access_control ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	CONSTRAINT pk_access_control PRIMARY KEY ( code ),
+	CONSTRAINT idx_access_control_name UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE "security"."role" ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	CONSTRAINT pk_role PRIMARY KEY ( code ),
+	CONSTRAINT idx_role_name UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE "security".user_role ( 
+	username             varchar(30)  NOT NULL,
+	role_code            varchar(30)  NOT NULL,
+	CONSTRAINT pk_user_role PRIMARY KEY ( username, role_code ),
+	CONSTRAINT fk_user_role_username FOREIGN KEY ( username ) REFERENCES "public".user_account( username )    ,
+	CONSTRAINT fk_user_role_code FOREIGN KEY ( role_code ) REFERENCES "security"."role"( code )    
+ );
+
+CREATE INDEX idx_user_role ON "security".user_role ( username );
+
+CREATE INDEX idx_user_role_0 ON "security".user_role ( role_code );
+
+CREATE TABLE "security".access_control_list ( 
+	role_code            varchar(30)  NOT NULL,
+	module_code          varchar(30)  NOT NULL,
+	access_control_code  varchar(30)  NOT NULL,
+	CONSTRAINT pk_access_control_list PRIMARY KEY ( role_code, module_code, access_control_code ),
+	CONSTRAINT fk_access_control_list_role_code FOREIGN KEY ( role_code ) REFERENCES "security"."role"( code )    ,
+	CONSTRAINT fk_access_control_list_access_control_code FOREIGN KEY ( access_control_code ) REFERENCES "security".access_control( code )    ,
+	CONSTRAINT fk_access_control_list_module_code FOREIGN KEY ( module_code ) REFERENCES "public"."module"( code )    
+ );
+
+CREATE INDEX idx_access_control_list ON "security".access_control_list ( role_code );
+
+CREATE INDEX idx_access_control_list_0 ON "security".access_control_list ( access_control_code );
+
+CREATE INDEX idx_access_control_list_1 ON "security".access_control_list ( module_code );
+
+]]></string>
+		</script>
+		<script name="Sql_001" id="Query_6e07d65" language="SQL" >
+			<string><![CDATA[CREATE SCHEMA hris;
+
+CREATE SCHEMA payroll;
+
+CREATE SCHEMA "public";
+
+CREATE SCHEMA "security";
+
+CREATE SEQUENCE payroll.seq_annual_salary_tax_table START WITH 1;
+
+CREATE SEQUENCE payroll.seq_monthly_tax_table_id START WITH 1;
+
+CREATE SEQUENCE payroll.seq_philhealth_table_id START WITH 1;
+
+CREATE SEQUENCE payroll.seq_sss_table_id START WITH 1;
+
+CREATE TABLE hris.employee ( 
+	code                 varchar(30)  NOT NULL,
+	is_active            bool DEFAULT true NOT NULL,
+	location_code        varchar(30)  NOT NULL,
+	policy_code          varchar(30)  NOT NULL,
+	position_code        varchar(30)  NOT NULL,
+	tax_category_code    varchar(30)  NOT NULL,
+	email                varchar(30)  NOT NULL,
+	first_name           varchar(100)  NOT NULL,
+	middle_name          varchar(100)  ,
+	last_name            varchar(100)  NOT NULL,
+	address              text  ,
+	birth_date           date  ,
+	gender_code          varchar(2) DEFAULT 'M' NOT NULL,
+	civil_status_code    varchar(2) DEFAULT 'S' NOT NULL,
+	contact_number_1     varchar(20)  ,
+	contact_number_2     varchar(20)  ,
+	basic_salary         numeric(10,4)  NOT NULL,
+	basic_salary_uom     varchar(4) DEFAULT 'MON' NOT NULL,
+	date_hired           date  ,
+	create_at            timestamp  ,
+	updated_at           timestamp  ,
+	CONSTRAINT pk_employee PRIMARY KEY ( code ),
+	CONSTRAINT fk_employee_location_code FOREIGN KEY ( location_code ) REFERENCES "public"."location"( code )    ,
+	CONSTRAINT fk_employee_tax_category_code FOREIGN KEY ( tax_category_code ) REFERENCES payroll.tax_category( code )    
+ );
+
+CREATE INDEX idx_employee ON hris.employee ( location_code );
+
+CREATE INDEX idx_employee_0 ON hris.employee ( tax_category_code );
+
+COMMENT ON COLUMN hris.employee.basic_salary_uom IS 'UOM = Unit of Measurement: (MON)Month, (DAY)Day, (HR)Hour, (MIN) Minute, (EA) Exact Amount';
+
+CREATE TABLE hris.employee_payroll_item_amount ( 
+	employee_code        varchar(30)  NOT NULL,
+	payroll_item_code    varchar(30)  NOT NULL,
+	amount               numeric(10,4)  NOT NULL,
+	CONSTRAINT pk_employee_payroll_item_amount PRIMARY KEY ( employee_code, payroll_item_code ),
+	CONSTRAINT fk_employee_payroll_item_amount_employee_code FOREIGN KEY ( employee_code ) REFERENCES hris.employee( code )    ,
+	CONSTRAINT fk_employee_payroll_item_amount_payroll_item_code FOREIGN KEY ( payroll_item_code ) REFERENCES payroll.payroll_item( code )    
+ );
+
+CREATE INDEX idx_employee_payroll_item_amount ON hris.employee_payroll_item_amount ( employee_code );
+
+CREATE INDEX idx_employee_payroll_item_amount_0 ON hris.employee_payroll_item_amount ( payroll_item_code );
+
+CREATE TABLE hris.holiday ( 
+	code                 varchar(30)  NOT NULL,
+	is_active            bool  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	holiday_type_code    varchar(30)  NOT NULL,
+	date_start           date DEFAULT current_date NOT NULL,
+	date_end             date DEFAULT current_date NOT NULL,
+	CONSTRAINT pk_holiday PRIMARY KEY ( code )
+ );
+
+CREATE TABLE hris.holiday_location ( 
+	holiday_code         varchar(30)  NOT NULL,
+	location_code        varchar(30)  NOT NULL,
+	CONSTRAINT pk_holiday_location PRIMARY KEY ( holiday_code ),
+	CONSTRAINT fk_holiday_location_holiday_code FOREIGN KEY ( holiday_code ) REFERENCES hris.holiday( code )    ,
+	CONSTRAINT fk_holiday_location_code FOREIGN KEY ( location_code ) REFERENCES "public"."location"( code )    
+ );
+
+CREATE INDEX idx_holiday_location ON hris.holiday_location ( location_code );
+
+CREATE TABLE hris.payroll_payment_method ( 
+	employee_code        varchar(30)  NOT NULL,
+	payment_method_code  char(2)  NOT NULL,
+	bank_code            varchar(30)  ,
+	account_no           varchar(100)  ,
+	CONSTRAINT pk_payrol_payment_method PRIMARY KEY ( employee_code ),
+	CONSTRAINT fk_payroll_payment_method_employee_code FOREIGN KEY ( employee_code ) REFERENCES hris.employee( code )    ,
+	CONSTRAINT fk_payroll_payment_method_bank_code FOREIGN KEY ( bank_code ) REFERENCES "public".bank( code )    
+ );
+
+CREATE INDEX idx_payroll_payment_method ON hris.payroll_payment_method ( bank_code );
+
+COMMENT ON COLUMN hris.payroll_payment_method.payment_method_code IS '(C) cash, (B) Bank Deposit';
+
+CREATE TABLE hris.policy ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	description          text  ,
+	CONSTRAINT pk_policy PRIMARY KEY ( code ),
+	CONSTRAINT idx_policy_name UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE hris.policy_payroll_item ( 
+	policy_code          varchar(30)  NOT NULL,
+	payroll_item_code    varchar(30)  NOT NULL,
+	CONSTRAINT pk_policy_payroll_items PRIMARY KEY ( policy_code, payroll_item_code ),
+	CONSTRAINT fk_policy_payroll_item_policy_code FOREIGN KEY ( policy_code ) REFERENCES hris.policy( code )    ,
+	CONSTRAINT fk_policy_payroll_item_code FOREIGN KEY ( payroll_item_code ) REFERENCES payroll.payroll_item( code )    
+ );
+
+CREATE INDEX idx_policy_payroll_item ON hris.policy_payroll_item ( policy_code );
+
+CREATE INDEX idx_policy_payroll_item_0 ON hris.policy_payroll_item ( payroll_item_code );
+
+CREATE TABLE hris.shift ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	scheduled_in         time  NOT NULL,
+	scheduled_out        time  NOT NULL,
+	forced_break_minutes integer DEFAULT 60 NOT NULL,
+	CONSTRAINT pk_shift PRIMARY KEY ( code )
+ );
+
+CREATE TABLE hris.table_ ( 
+ );
+
+CREATE TABLE hris.work_schedule ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	CONSTRAINT pk_work_schedule PRIMARY KEY ( code ),
+	CONSTRAINT idx_work_schedule UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE hris.work_schedule_shift ( 
+	work_schedule_code   varchar(30)  NOT NULL,
+	shift_code           varchar(30)  NOT NULL,
+	week_day             integer DEFAULT 1 NOT NULL,
+	CONSTRAINT pk_work_schedule_shift PRIMARY KEY ( work_schedule_code, shift_code, week_day ),
+	CONSTRAINT fk_work_schedule_shift_work_schedule_code FOREIGN KEY ( work_schedule_code ) REFERENCES hris.work_schedule( code )    ,
+	CONSTRAINT fk_work_schedule_shift_code FOREIGN KEY ( shift_code ) REFERENCES hris.shift( code )    
+ );
+
+CREATE INDEX idx_work_schedule_shift ON hris.work_schedule_shift ( work_schedule_code );
+
+CREATE INDEX idx_work_schedule_shift_0 ON hris.work_schedule_shift ( shift_code );
+
+COMMENT ON COLUMN hris.work_schedule_shift.week_day IS '1 (sunday) -> 7 (saturday)';
+
+CREATE TABLE hris.employee_work_schedule ( 
+	effective_date       date DEFAULT current_date NOT NULL,
+	employee_code        varchar(30)  NOT NULL,
+	work_schedule_code   varchar(30)  NOT NULL,
+	locked               bool DEFAULT false NOT NULL,
+	CONSTRAINT pk_employee_work_schedule PRIMARY KEY ( employee_code, effective_date ),
+	CONSTRAINT fk_employee_work_schedule_employee_code FOREIGN KEY ( employee_code ) REFERENCES hris.employee( code )    ,
+	CONSTRAINT fk_employee_work_schedule_code FOREIGN KEY ( work_schedule_code ) REFERENCES hris.work_schedule( code )    
+ );
+
+CREATE INDEX idx_employee_work_schedule ON hris.employee_work_schedule ( employee_code );
+
+CREATE INDEX idx_employee_work_schedule_0 ON hris.employee_work_schedule ( work_schedule_code );
+
+CREATE TABLE payroll.annual_salary_tax_table ( 
+	id                   integer  NOT NULL,
+	over_amount          numeric(10,2)  NOT NULL,
+	under_amount         numeric(10,2)  NOT NULL,
+	tax_due              numeric(10,2)  NOT NULL,
+	tax_due_percent_of_excess integer  NOT NULL,
+	CONSTRAINT pk_bir_annual_salary_tax_table PRIMARY KEY ( id )
+ );
+
+CREATE TABLE payroll.payroll ( 
+	pay_period           date DEFAULT current_date NOT NULL,
+	is_open              bool DEFAULT true NOT NULL,
+	cutoff_start         date  NOT NULL,
+	cutoff_end           date  NOT NULL,
+	include_monthly_processable bool DEFAULT false NOT NULL,
+	approved_by          varchar(100)  NOT NULL,
+	prepared_by          varchar(100)  NOT NULL,
+	received_by          varchar(100)  NOT NULL,
+	CONSTRAINT pk_payroll PRIMARY KEY ( pay_period )
+ );
+
+CREATE TABLE payroll.payroll_item ( 
+	code                 varchar(30)  NOT NULL,
+	type_code            varchar(2)  NOT NULL,
+	computation_uom      varchar(4) DEFAULT 'MIN' NOT NULL,
+	payslip_display_name varchar(100)  NOT NULL,
+	is_employee_amount_required bool DEFAULT true NOT NULL,
+	dependent_on_variable_code varchar(10)  NOT NULL,
+	system_reserved      bool DEFAULT false NOT NULL,
+	taxable              bool DEFAULT true NOT NULL,
+	CONSTRAINT pk_payroll_item PRIMARY KEY ( code )
+ );
+
+COMMENT ON COLUMN payroll.payroll_item.type_code IS '(D)eduction or (E)arnings';
+
+COMMENT ON COLUMN payroll.payroll_item.computation_uom IS 'UOM = Unit of Measurement: (MON)Month, (DAY)Day, (HR)Hour, (MIN) Minute, (EA) Exact Amount';
+
+COMMENT ON COLUMN payroll.payroll_item.dependent_on_variable_code IS '(SLRY) Salary, (DYPRSNT) No. of Days Present, (DYABS) No. of Days Absent, (LTSUNDT) Lates & Undertime, (HFDYABS) No. of Half Days Absent, (OT) Regular Overtime, (RDOT) Rest Day Overtime, (HOT) Holiday Overtime, (SHOT) Special Holiday Overtime, (RHOT) Rest Day Holiday Overtime, (RSHOT) Rest Day Special Holiday Overtime';
+
+CREATE TABLE payroll.philhealth_table ( 
+	salary_bracket_id    integer  NOT NULL,
+	salary_range_from    numeric(10,2)  NOT NULL,
+	salary_range_to      numeric(10,2)  NOT NULL,
+	total_contribution   numeric(10,2)  NOT NULL,
+	employer_share       numeric(10,2)  NOT NULL,
+	employee_share       numeric(10,2)  NOT NULL,
+	CONSTRAINT pk_philhealth_tabe PRIMARY KEY ( salary_bracket_id )
+ );
+
+CREATE TABLE payroll.sss_table ( 
+	salary_bracket_id    integer  NOT NULL,
+	salary_range_from    numeric(10,2)  NOT NULL,
+	salary_range_to      numeric(10,2)  NOT NULL,
+	total_contribution   numeric(10,2)  NOT NULL,
+	employer_share       numeric(10,2)  NOT NULL,
+	employee_share       numeric(10,2)  NOT NULL,
+	CONSTRAINT pk_sss_table PRIMARY KEY ( salary_bracket_id )
+ );
+
+CREATE TABLE payroll.tax_category ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	annual_exemption_amount numeric(10,2) DEFAULT 0 NOT NULL,
+	CONSTRAINT pk_tax_category PRIMARY KEY ( code )
+ );
+
+CREATE TABLE payroll.monthly_salary_tax_table ( 
+	id                   integer  NOT NULL,
+	tax_category_code    varchar(30)  NOT NULL,
+	over_amount          numeric(10,2)  NOT NULL,
+	under_amount         numeric(10,2)  NOT NULL,
+	tax_due              numeric(10,2)  NOT NULL,
+	tax_due_percent_of_excess integer  NOT NULL,
+	CONSTRAINT pk_bir_annual_salary_tax_table_0 PRIMARY KEY ( id ),
+	CONSTRAINT fk_monthly_salary_tax_table_tax_category_code FOREIGN KEY ( tax_category_code ) REFERENCES payroll.tax_category( code )    
+ );
+
+CREATE INDEX idx_bir_monthly_salary_tax_table ON payroll.monthly_salary_tax_table ( tax_category_code );
+
+CREATE TABLE payroll.payroll_entry ( 
+	payroll_pay_period   date  NOT NULL,
+	employee_code        varchar(30)  NOT NULL,
+	payroll_item_code    varchar(30)  NOT NULL,
+	payroll_generated    bool DEFAULT false NOT NULL,
+	qty                  numeric(10,4)  NOT NULL,
+	amount               numeric(10,4)  NOT NULL,
+	remarks              varchar(100)  ,
+	CONSTRAINT pk_payroll_entry PRIMARY KEY ( payroll_pay_period, employee_code, payroll_item_code ),
+	CONSTRAINT fk_payroll_entry_pay_period FOREIGN KEY ( payroll_pay_period ) REFERENCES payroll.payroll( pay_period )    ,
+	CONSTRAINT fk_payroll_entry_employee_code FOREIGN KEY ( employee_code ) REFERENCES hris.employee( code )    ,
+	CONSTRAINT fk_payroll_entry_item_code FOREIGN KEY ( payroll_item_code ) REFERENCES payroll.payroll_item( code )    
+ );
+
+CREATE INDEX idx_payroll_entry ON payroll.payroll_entry ( payroll_pay_period );
+
+CREATE INDEX idx_payroll_entry_0 ON payroll.payroll_entry ( employee_code );
+
+CREATE INDEX idx_payroll_entry_1 ON payroll.payroll_entry ( payroll_item_code );
+
+CREATE TABLE "public".bank ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	CONSTRAINT pk_bank_account PRIMARY KEY ( code ),
+	CONSTRAINT idx_bank_account UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE "public".company ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	created_at           timestamp  ,
+	updated_at           timestamp  ,
+	CONSTRAINT pk_company PRIMARY KEY ( code ),
+	CONSTRAINT idx_company_name UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE "public"."location" ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	company_code         varchar(30)  NOT NULL,
+	created_at           timestamp  ,
+	updated_at           timestamp  ,
+	CONSTRAINT pk_location PRIMARY KEY ( code ),
+	CONSTRAINT idx_location UNIQUE ( display_name ) ,
+	CONSTRAINT fk_location_company_code FOREIGN KEY ( company_code ) REFERENCES "public".company( code ) ON DELETE CASCADE ON UPDATE CASCADE
+ );
+
+CREATE INDEX idx_location_1 ON "public"."location" ( company_code );
+
+CREATE TABLE "public"."module" ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	CONSTRAINT pk_module PRIMARY KEY ( code ),
+	CONSTRAINT idx_module_name UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE "public".number_series ( 
+	code                 varchar(12)  NOT NULL,
+	module_code          varchar(30)  NOT NULL,
+	starting_number      integer DEFAULT 0 NOT NULL,
+	ending_number        integer DEFAULT 99999 NOT NULL,
+	last_number_used     integer DEFAULT 0 NOT NULL,
+	effective_date       date DEFAULT current_date NOT NULL,
+	created_at           timestamp  ,
+	updated_at           timestamp  ,
+	CONSTRAINT pk_number_series PRIMARY KEY ( code ),
+	CONSTRAINT fk_number_series_module_code FOREIGN KEY ( module_code ) REFERENCES "public"."module"( code )    
+ );
+
+CREATE INDEX idx_number_series ON "public".number_series ( module_code );
+
+CREATE TABLE "public".user_account ( 
+	username             varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	default_location_code varchar(30)  ,
+	"password"           varchar(120)  NOT NULL,
+	remember_token       varchar(120)  ,
+	created_at           timestamp  ,
+	updated_at           timestamp  ,
+	CONSTRAINT pk_user_account PRIMARY KEY ( username ),
+	CONSTRAINT fk_user_account_location_code FOREIGN KEY ( default_location_code ) REFERENCES "public"."location"( code )    
+ );
+
+CREATE INDEX idx_user_account ON "public".user_account ( default_location_code );
+
+CREATE TABLE "security".access_control ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	CONSTRAINT pk_access_control PRIMARY KEY ( code ),
+	CONSTRAINT idx_access_control_name UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE "security"."role" ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	CONSTRAINT pk_role PRIMARY KEY ( code ),
+	CONSTRAINT idx_role_name UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE "security".user_role ( 
+	username             varchar(30)  NOT NULL,
+	role_code            varchar(30)  NOT NULL,
+	CONSTRAINT pk_user_role PRIMARY KEY ( username, role_code ),
+	CONSTRAINT fk_user_role_username FOREIGN KEY ( username ) REFERENCES "public".user_account( username )    ,
+	CONSTRAINT fk_user_role_code FOREIGN KEY ( role_code ) REFERENCES "security"."role"( code )    
+ );
+
+CREATE INDEX idx_user_role ON "security".user_role ( username );
+
+CREATE INDEX idx_user_role_0 ON "security".user_role ( role_code );
+
+CREATE TABLE "security".access_control_list ( 
+	role_code            varchar(30)  NOT NULL,
+	module_code          varchar(30)  NOT NULL,
+	access_control_code  varchar(30)  NOT NULL,
+	CONSTRAINT pk_access_control_list PRIMARY KEY ( role_code, module_code, access_control_code ),
+	CONSTRAINT fk_access_control_list_role_code FOREIGN KEY ( role_code ) REFERENCES "security"."role"( code )    ,
+	CONSTRAINT fk_access_control_list_access_control_code FOREIGN KEY ( access_control_code ) REFERENCES "security".access_control( code )    ,
+	CONSTRAINT fk_access_control_list_module_code FOREIGN KEY ( module_code ) REFERENCES "public"."module"( code )    
+ );
+
+CREATE INDEX idx_access_control_list ON "security".access_control_list ( role_code );
+
+CREATE INDEX idx_access_control_list_0 ON "security".access_control_list ( access_control_code );
+
+CREATE INDEX idx_access_control_list_1 ON "security".access_control_list ( module_code );
+
+]]></string>
+		</script>
+		<script name="Sql_002" id="Query_b77adc2" language="SQL" >
+			<string><![CDATA[CREATE SCHEMA hris;
+
+CREATE SCHEMA payroll;
+
+CREATE SCHEMA "public";
+
+CREATE SCHEMA "security";
+
+CREATE SEQUENCE payroll.seq_annual_salary_tax_table START WITH 1;
+
+CREATE SEQUENCE payroll.seq_monthly_tax_table_id START WITH 1;
+
+CREATE SEQUENCE payroll.seq_philhealth_table_id START WITH 1;
+
+CREATE SEQUENCE payroll.seq_sss_table_id START WITH 1;
+
+CREATE TABLE hris.holiday ( 
+	code                 varchar(30)  NOT NULL,
+	is_active            bool  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	holiday_type_code    varchar(30)  NOT NULL,
+	date_start           date DEFAULT current_date NOT NULL,
+	date_end             date DEFAULT current_date NOT NULL,
+	CONSTRAINT pk_holiday PRIMARY KEY ( code )
+ );
+
+CREATE TABLE hris.holiday_location ( 
+	holiday_code         varchar(30)  NOT NULL,
+	location_code        varchar(30)  NOT NULL,
+	CONSTRAINT pk_holiday_location PRIMARY KEY ( holiday_code ),
+	CONSTRAINT fk_holiday_location_holiday_code FOREIGN KEY ( holiday_code ) REFERENCES hris.holiday( code )    ,
+	CONSTRAINT fk_holiday_location_code FOREIGN KEY ( location_code ) REFERENCES "public"."location"( code )    
+ );
+
+CREATE INDEX idx_holiday_location ON hris.holiday_location ( location_code );
+
+CREATE TABLE hris.payroll_type ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	CONSTRAINT pk_payroll_type PRIMARY KEY ( code ),
+	CONSTRAINT idx_payroll_type_name UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE hris.policy ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	description          text  ,
+	CONSTRAINT pk_policy PRIMARY KEY ( code ),
+	CONSTRAINT idx_policy_name UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE hris.policy_payroll_item ( 
+	policy_code          varchar(30)  NOT NULL,
+	payroll_item_code    varchar(30)  NOT NULL,
+	CONSTRAINT pk_policy_payroll_items PRIMARY KEY ( policy_code, payroll_item_code ),
+	CONSTRAINT fk_policy_payroll_item_policy_code FOREIGN KEY ( policy_code ) REFERENCES hris.policy( code )    ,
+	CONSTRAINT fk_policy_payroll_item_code FOREIGN KEY ( payroll_item_code ) REFERENCES payroll.payroll_item( code )    
+ );
+
+CREATE INDEX idx_policy_payroll_item ON hris.policy_payroll_item ( policy_code );
+
+CREATE INDEX idx_policy_payroll_item_0 ON hris.policy_payroll_item ( payroll_item_code );
+
+CREATE TABLE hris.position_level ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	"level"              timestamp  NOT NULL,
+	CONSTRAINT pk_position_level PRIMARY KEY ( code )
+ );
+
+CREATE TABLE hris.shift ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	scheduled_in         time  NOT NULL,
+	scheduled_out        time  NOT NULL,
+	forced_break_minutes integer DEFAULT 60 NOT NULL,
+	CONSTRAINT pk_shift PRIMARY KEY ( code )
+ );
+
+CREATE TABLE hris.table_ ( 
+ );
+
+CREATE TABLE hris.work_schedule ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	CONSTRAINT pk_work_schedule PRIMARY KEY ( code ),
+	CONSTRAINT idx_work_schedule UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE hris.work_schedule_shift ( 
+	work_schedule_code   varchar(30)  NOT NULL,
+	shift_code           varchar(30)  NOT NULL,
+	week_day             integer DEFAULT 1 NOT NULL,
+	CONSTRAINT pk_work_schedule_shift PRIMARY KEY ( work_schedule_code, shift_code, week_day ),
+	CONSTRAINT fk_work_schedule_shift_work_schedule_code FOREIGN KEY ( work_schedule_code ) REFERENCES hris.work_schedule( code )    ,
+	CONSTRAINT fk_work_schedule_shift_code FOREIGN KEY ( shift_code ) REFERENCES hris.shift( code )    
+ );
+
+CREATE INDEX idx_work_schedule_shift ON hris.work_schedule_shift ( work_schedule_code );
+
+CREATE INDEX idx_work_schedule_shift_0 ON hris.work_schedule_shift ( shift_code );
+
+COMMENT ON COLUMN hris.work_schedule_shift.week_day IS '1 (sunday) -> 7 (saturday)';
+
+CREATE TABLE hris."position" ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  ,
+	position_level_code  varchar(30)  NOT NULL,
+	CONSTRAINT pk_position PRIMARY KEY ( code ),
+	CONSTRAINT idx_position_name UNIQUE ( display_name ) ,
+	CONSTRAINT fk_position_level_code FOREIGN KEY ( position_level_code ) REFERENCES hris.position_level( code )    
+ );
+
+CREATE INDEX idx_position ON hris."position" ( position_level_code );
+
+CREATE TABLE hris.employee ( 
+	code                 varchar(30)  NOT NULL,
+	is_active            bool DEFAULT true NOT NULL,
+	location_code        varchar(30)  NOT NULL,
+	policy_code          varchar(30)  NOT NULL,
+	position_code        varchar(30)  NOT NULL,
+	tax_category_code    varchar(30)  NOT NULL,
+	payroll_type_code    varchar(30)  NOT NULL,
+	email                varchar(30)  NOT NULL,
+	first_name           varchar(100)  NOT NULL,
+	middle_name          varchar(100)  ,
+	last_name            varchar(100)  NOT NULL,
+	address              text  ,
+	birth_date           date  ,
+	gender_code          varchar(2) DEFAULT 'M' NOT NULL,
+	civil_status_code    varchar(2) DEFAULT 'S' NOT NULL,
+	contact_number_1     varchar(20)  ,
+	contact_number_2     varchar(20)  ,
+	basic_salary         numeric(10,4)  NOT NULL,
+	basic_salary_uom     varchar(4) DEFAULT 'MON' NOT NULL,
+	date_hired           date  ,
+	create_at            timestamp  ,
+	updated_at           timestamp  ,
+	CONSTRAINT pk_employee PRIMARY KEY ( code ),
+	CONSTRAINT fk_employee_location_code FOREIGN KEY ( location_code ) REFERENCES "public"."location"( code )    ,
+	CONSTRAINT fk_employee_tax_category_code FOREIGN KEY ( tax_category_code ) REFERENCES payroll.tax_category( code )    ,
+	CONSTRAINT fk_employee_payroll_type_code FOREIGN KEY ( payroll_type_code ) REFERENCES hris.payroll_type( code )    ,
+	CONSTRAINT fk_employee_position_code FOREIGN KEY ( position_code ) REFERENCES hris."position"( code )    ,
+	CONSTRAINT fk_employee_policy_code FOREIGN KEY ( policy_code ) REFERENCES hris.policy( code )    
+ );
+
+CREATE INDEX idx_employee ON hris.employee ( location_code );
+
+CREATE INDEX idx_employee_0 ON hris.employee ( tax_category_code );
+
+CREATE INDEX idx_employee_1 ON hris.employee ( payroll_type_code );
+
+CREATE INDEX idx_employee_2 ON hris.employee ( position_code );
+
+CREATE INDEX idx_employee_3 ON hris.employee ( policy_code );
+
+COMMENT ON COLUMN hris.employee.basic_salary_uom IS 'UOM = Unit of Measurement: (MON)Month, (DAY)Day, (HR)Hour, (MIN) Minute, (EA) Exact Amount';
+
+CREATE TABLE hris.employee_payroll_item_amount ( 
+	employee_code        varchar(30)  NOT NULL,
+	payroll_item_code    varchar(30)  NOT NULL,
+	amount               numeric(10,4)  NOT NULL,
+	CONSTRAINT pk_employee_payroll_item_amount PRIMARY KEY ( employee_code, payroll_item_code ),
+	CONSTRAINT fk_employee_payroll_item_amount_employee_code FOREIGN KEY ( employee_code ) REFERENCES hris.employee( code )    ,
+	CONSTRAINT fk_employee_payroll_item_amount_payroll_item_code FOREIGN KEY ( payroll_item_code ) REFERENCES payroll.payroll_item( code )    
+ );
+
+CREATE INDEX idx_employee_payroll_item_amount ON hris.employee_payroll_item_amount ( employee_code );
+
+CREATE INDEX idx_employee_payroll_item_amount_0 ON hris.employee_payroll_item_amount ( payroll_item_code );
+
+CREATE TABLE hris.employee_work_schedule ( 
+	effective_date       date DEFAULT current_date NOT NULL,
+	employee_code        varchar(30)  NOT NULL,
+	work_schedule_code   varchar(30)  NOT NULL,
+	locked               bool DEFAULT false NOT NULL,
+	CONSTRAINT pk_employee_work_schedule PRIMARY KEY ( employee_code, effective_date ),
+	CONSTRAINT fk_employee_work_schedule_employee_code FOREIGN KEY ( employee_code ) REFERENCES hris.employee( code )    ,
+	CONSTRAINT fk_employee_work_schedule_code FOREIGN KEY ( work_schedule_code ) REFERENCES hris.work_schedule( code )    
+ );
+
+CREATE INDEX idx_employee_work_schedule ON hris.employee_work_schedule ( employee_code );
+
+CREATE INDEX idx_employee_work_schedule_0 ON hris.employee_work_schedule ( work_schedule_code );
+
+CREATE TABLE hris.payroll_payment_method ( 
+	employee_code        varchar(30)  NOT NULL,
+	payment_method_code  char(2)  NOT NULL,
+	bank_code            varchar(30)  ,
+	account_no           varchar(100)  ,
+	CONSTRAINT pk_payrol_payment_method PRIMARY KEY ( employee_code ),
+	CONSTRAINT fk_payroll_payment_method_employee_code FOREIGN KEY ( employee_code ) REFERENCES hris.employee( code )    ,
+	CONSTRAINT fk_payroll_payment_method_bank_code FOREIGN KEY ( bank_code ) REFERENCES "public".bank( code )    
+ );
+
+CREATE INDEX idx_payroll_payment_method ON hris.payroll_payment_method ( bank_code );
+
+COMMENT ON COLUMN hris.payroll_payment_method.payment_method_code IS '(C) cash, (B) Bank Deposit';
+
+CREATE TABLE payroll.annual_salary_tax_table ( 
+	id                   integer  NOT NULL,
+	over_amount          numeric(10,2)  NOT NULL,
+	under_amount         numeric(10,2)  NOT NULL,
+	tax_due              numeric(10,2)  NOT NULL,
+	tax_due_percent_of_excess integer  NOT NULL,
+	CONSTRAINT pk_bir_annual_salary_tax_table PRIMARY KEY ( id )
+ );
+
+CREATE TABLE payroll.payroll ( 
+	pay_period           date DEFAULT current_date NOT NULL,
+	is_open              bool DEFAULT true NOT NULL,
+	cutoff_start         date  NOT NULL,
+	cutoff_end           date  NOT NULL,
+	include_monthly_processable bool DEFAULT false NOT NULL,
+	approved_by          varchar(100)  NOT NULL,
+	prepared_by          varchar(100)  NOT NULL,
+	received_by          varchar(100)  NOT NULL,
+	CONSTRAINT pk_payroll PRIMARY KEY ( pay_period )
+ );
+
+CREATE TABLE payroll.payroll_item ( 
+	code                 varchar(30)  NOT NULL,
+	type_code            varchar(2)  NOT NULL,
+	computation_uom      varchar(4) DEFAULT 'MIN' NOT NULL,
+	payslip_display_name varchar(100)  NOT NULL,
+	is_employee_amount_required bool DEFAULT true NOT NULL,
+	dependent_on_variable_code varchar(10)  NOT NULL,
+	system_reserved      bool DEFAULT false NOT NULL,
+	taxable              bool DEFAULT true NOT NULL,
+	CONSTRAINT pk_payroll_item PRIMARY KEY ( code )
+ );
+
+COMMENT ON COLUMN payroll.payroll_item.type_code IS '(D)eduction or (E)arnings';
+
+COMMENT ON COLUMN payroll.payroll_item.computation_uom IS 'UOM = Unit of Measurement: (MON)Month, (DAY)Day, (HR)Hour, (MIN) Minute, (EA) Exact Amount';
+
+COMMENT ON COLUMN payroll.payroll_item.dependent_on_variable_code IS '(SLRY) Salary, (DYPRSNT) No. of Days Present, (DYABS) No. of Days Absent, (LTSUNDT) Lates & Undertime, (HFDYABS) No. of Half Days Absent, (OT) Regular Overtime, (RDOT) Rest Day Overtime, (HOT) Holiday Overtime, (SHOT) Special Holiday Overtime, (RHOT) Rest Day Holiday Overtime, (RSHOT) Rest Day Special Holiday Overtime';
+
+CREATE TABLE payroll.philhealth_table ( 
+	salary_bracket_id    integer  NOT NULL,
+	salary_range_from    numeric(10,2)  NOT NULL,
+	salary_range_to      numeric(10,2)  NOT NULL,
+	total_contribution   numeric(10,2)  NOT NULL,
+	employer_share       numeric(10,2)  NOT NULL,
+	employee_share       numeric(10,2)  NOT NULL,
+	CONSTRAINT pk_philhealth_tabe PRIMARY KEY ( salary_bracket_id )
+ );
+
+CREATE TABLE payroll.sss_table ( 
+	salary_bracket_id    integer  NOT NULL,
+	salary_range_from    numeric(10,2)  NOT NULL,
+	salary_range_to      numeric(10,2)  NOT NULL,
+	total_contribution   numeric(10,2)  NOT NULL,
+	employer_share       numeric(10,2)  NOT NULL,
+	employee_share       numeric(10,2)  NOT NULL,
+	CONSTRAINT pk_sss_table PRIMARY KEY ( salary_bracket_id )
+ );
+
+CREATE TABLE payroll.tax_category ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	annual_exemption_amount numeric(10,2) DEFAULT 0 NOT NULL,
+	CONSTRAINT pk_tax_category PRIMARY KEY ( code )
+ );
+
+CREATE TABLE payroll.monthly_salary_tax_table ( 
+	id                   integer  NOT NULL,
+	tax_category_code    varchar(30)  NOT NULL,
+	payroll_type_code    varchar(30)  NOT NULL,
+	over_amount          numeric(10,2)  NOT NULL,
+	under_amount         numeric(10,2)  NOT NULL,
+	tax_due              numeric(10,2)  NOT NULL,
+	tax_due_percent_of_excess integer  NOT NULL,
+	CONSTRAINT pk_bir_annual_salary_tax_table_0 PRIMARY KEY ( id ),
+	CONSTRAINT fk_monthly_salary_tax_table_tax_category_code FOREIGN KEY ( tax_category_code ) REFERENCES payroll.tax_category( code )    ,
+	CONSTRAINT fk_monthly_salary_tax_table_payroll_type FOREIGN KEY ( payroll_type_code ) REFERENCES hris.payroll_type( code )    
+ );
+
+CREATE INDEX idx_bir_monthly_salary_tax_table ON payroll.monthly_salary_tax_table ( tax_category_code );
+
+CREATE INDEX idx_monthly_salary_tax_table ON payroll.monthly_salary_tax_table ( payroll_type_code );
+
+CREATE TABLE payroll.payroll_entry ( 
+	payroll_pay_period   date  NOT NULL,
+	employee_code        varchar(30)  NOT NULL,
+	payroll_item_code    varchar(30)  NOT NULL,
+	payroll_generated    bool DEFAULT false NOT NULL,
+	qty                  numeric(10,4)  NOT NULL,
+	amount               numeric(10,4)  NOT NULL,
+	remarks              varchar(100)  ,
+	CONSTRAINT pk_payroll_entry PRIMARY KEY ( payroll_pay_period, employee_code, payroll_item_code ),
+	CONSTRAINT fk_payroll_entry_pay_period FOREIGN KEY ( payroll_pay_period ) REFERENCES payroll.payroll( pay_period )    ,
+	CONSTRAINT fk_payroll_entry_employee_code FOREIGN KEY ( employee_code ) REFERENCES hris.employee( code )    ,
+	CONSTRAINT fk_payroll_entry_item_code FOREIGN KEY ( payroll_item_code ) REFERENCES payroll.payroll_item( code )    
+ );
+
+CREATE INDEX idx_payroll_entry ON payroll.payroll_entry ( payroll_pay_period );
+
+CREATE INDEX idx_payroll_entry_0 ON payroll.payroll_entry ( employee_code );
+
+CREATE INDEX idx_payroll_entry_1 ON payroll.payroll_entry ( payroll_item_code );
+
+CREATE TABLE "public".bank ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	CONSTRAINT pk_bank_account PRIMARY KEY ( code ),
+	CONSTRAINT idx_bank_account UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE "public".company ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	created_at           timestamp  ,
+	updated_at           timestamp  ,
+	CONSTRAINT pk_company PRIMARY KEY ( code ),
+	CONSTRAINT idx_company_name UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE "public"."location" ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	company_code         varchar(30)  NOT NULL,
+	created_at           timestamp  ,
+	updated_at           timestamp  ,
+	CONSTRAINT pk_location PRIMARY KEY ( code ),
+	CONSTRAINT idx_location UNIQUE ( display_name ) ,
+	CONSTRAINT fk_location_company_code FOREIGN KEY ( company_code ) REFERENCES "public".company( code ) ON DELETE CASCADE ON UPDATE CASCADE
+ );
+
+CREATE INDEX idx_location_1 ON "public"."location" ( company_code );
+
+CREATE TABLE "public"."module" ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	CONSTRAINT pk_module PRIMARY KEY ( code ),
+	CONSTRAINT idx_module_name UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE "public".number_series ( 
+	code                 varchar(12)  NOT NULL,
+	module_code          varchar(30)  NOT NULL,
+	starting_number      integer DEFAULT 0 NOT NULL,
+	ending_number        integer DEFAULT 99999 NOT NULL,
+	last_number_used     integer DEFAULT 0 NOT NULL,
+	effective_date       date DEFAULT current_date NOT NULL,
+	created_at           timestamp  ,
+	updated_at           timestamp  ,
+	CONSTRAINT pk_number_series PRIMARY KEY ( code ),
+	CONSTRAINT fk_number_series_module_code FOREIGN KEY ( module_code ) REFERENCES "public"."module"( code )    
+ );
+
+CREATE INDEX idx_number_series ON "public".number_series ( module_code );
+
+CREATE TABLE "public".user_account ( 
+	username             varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	default_location_code varchar(30)  ,
+	"password"           varchar(120)  NOT NULL,
+	remember_token       varchar(120)  ,
+	created_at           timestamp  ,
+	updated_at           timestamp  ,
+	CONSTRAINT pk_user_account PRIMARY KEY ( username ),
+	CONSTRAINT fk_user_account_location_code FOREIGN KEY ( default_location_code ) REFERENCES "public"."location"( code )    
+ );
+
+CREATE INDEX idx_user_account ON "public".user_account ( default_location_code );
+
+CREATE TABLE "security".access_control ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	CONSTRAINT pk_access_control PRIMARY KEY ( code ),
+	CONSTRAINT idx_access_control_name UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE "security"."role" ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	CONSTRAINT pk_role PRIMARY KEY ( code ),
+	CONSTRAINT idx_role_name UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE "security".user_role ( 
+	username             varchar(30)  NOT NULL,
+	role_code            varchar(30)  NOT NULL,
+	CONSTRAINT pk_user_role PRIMARY KEY ( username, role_code ),
+	CONSTRAINT fk_user_role_username FOREIGN KEY ( username ) REFERENCES "public".user_account( username )    ,
+	CONSTRAINT fk_user_role_code FOREIGN KEY ( role_code ) REFERENCES "security"."role"( code )    
+ );
+
+CREATE INDEX idx_user_role ON "security".user_role ( username );
+
+CREATE INDEX idx_user_role_0 ON "security".user_role ( role_code );
+
+CREATE TABLE "security".access_control_list ( 
+	role_code            varchar(30)  NOT NULL,
+	module_code          varchar(30)  NOT NULL,
+	access_control_code  varchar(30)  NOT NULL,
+	CONSTRAINT pk_access_control_list PRIMARY KEY ( role_code, module_code, access_control_code ),
+	CONSTRAINT fk_access_control_list_role_code FOREIGN KEY ( role_code ) REFERENCES "security"."role"( code )    ,
+	CONSTRAINT fk_access_control_list_access_control_code FOREIGN KEY ( access_control_code ) REFERENCES "security".access_control( code )    ,
+	CONSTRAINT fk_access_control_list_module_code FOREIGN KEY ( module_code ) REFERENCES "public"."module"( code )    
+ );
+
+CREATE INDEX idx_access_control_list ON "security".access_control_list ( role_code );
+
+CREATE INDEX idx_access_control_list_0 ON "security".access_control_list ( access_control_code );
+
+CREATE INDEX idx_access_control_list_1 ON "security".access_control_list ( module_code );
+
+]]></string>
+		</script>
+		<script name="Sql_003" id="Query_1aedbd3f" language="SQL" >
+			<string><![CDATA[CREATE SCHEMA hris;
+
+CREATE SCHEMA payroll;
+
+CREATE SCHEMA "public";
+
+CREATE SCHEMA "security";
+
+CREATE SEQUENCE payroll.seq_annual_salary_tax_table START WITH 1;
+
+CREATE SEQUENCE payroll.seq_monthly_tax_table_id START WITH 1;
+
+CREATE SEQUENCE payroll.seq_philhealth_table_id START WITH 1;
+
+CREATE SEQUENCE payroll.seq_sss_table_id START WITH 1;
+
+CREATE TABLE hris.holiday ( 
+	code                 varchar(30)  NOT NULL,
+	is_active            bool  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	holiday_type_code    varchar(30)  NOT NULL,
+	date_start           date DEFAULT ('now'::text)::date NOT NULL,
+	date_end             date DEFAULT ('now'::text)::date NOT NULL,
+	CONSTRAINT pk_holiday PRIMARY KEY ( code )
+ );
+
+CREATE TABLE hris.holiday_location ( 
+	holiday_code         varchar(30)  NOT NULL,
+	location_code        varchar(30)  NOT NULL,
+	CONSTRAINT pk_holiday_location PRIMARY KEY ( holiday_code ),
+	CONSTRAINT fk_holiday_location_holiday_code FOREIGN KEY ( holiday_code ) REFERENCES hris.holiday( code )    ,
+	CONSTRAINT fk_holiday_location_code FOREIGN KEY ( location_code ) REFERENCES "public"."location"( code )    
+ );
+
+CREATE INDEX idx_holiday_location ON hris.holiday_location ( location_code );
+
+CREATE TABLE hris.policy ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	description          text  ,
+	grace_period_minutes integer DEFAULT 0 NOT NULL,
+	night_differential_start_time time  ,
+	created_at           timestamp  ,
+	created_by           varchar(30)  ,
+	updated_at           timestamp  ,
+	updated_by           varchar(30)  ,
+	CONSTRAINT pk_policy PRIMARY KEY ( code ),
+	CONSTRAINT idx_policy_name UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE hris.policy_payroll_item ( 
+	policy_code          varchar(30)  NOT NULL,
+	payroll_item_code    varchar(30)  NOT NULL,
+	CONSTRAINT pk_policy_payroll_items PRIMARY KEY ( policy_code, payroll_item_code ),
+	CONSTRAINT fk_policy_payroll_item_policy_code FOREIGN KEY ( policy_code ) REFERENCES hris.policy( code )    ,
+	CONSTRAINT fk_policy_payroll_item_code FOREIGN KEY ( payroll_item_code ) REFERENCES payroll.payroll_item( code )    
+ );
+
+CREATE INDEX idx_policy_payroll_item ON hris.policy_payroll_item ( policy_code );
+
+CREATE INDEX idx_policy_payroll_item_0 ON hris.policy_payroll_item ( payroll_item_code );
+
+CREATE TABLE hris.position_level ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	"level"              integer  NOT NULL,
+	CONSTRAINT pk_position_level PRIMARY KEY ( code )
+ );
+
+CREATE TABLE hris.shift ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	scheduled_in         time  NOT NULL,
+	scheduled_out        time  NOT NULL,
+	forced_break_minutes integer DEFAULT 60 NOT NULL,
+	calendar_color       varchar(20)  ,
+	CONSTRAINT pk_shift PRIMARY KEY ( code )
+ );
+
+CREATE TABLE hris.work_schedule ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	CONSTRAINT pk_work_schedule PRIMARY KEY ( code ),
+	CONSTRAINT idx_work_schedule UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE hris.work_schedule_shift ( 
+	work_schedule_code   varchar(30)  NOT NULL,
+	shift_code           varchar(30)  NOT NULL,
+	week_day             integer DEFAULT 1 NOT NULL,
+	CONSTRAINT pk_work_schedule_shift PRIMARY KEY ( work_schedule_code, shift_code, week_day ),
+	CONSTRAINT fk_work_schedule_shift_work_schedule_code FOREIGN KEY ( work_schedule_code ) REFERENCES hris.work_schedule( code )    ,
+	CONSTRAINT fk_work_schedule_shift_code FOREIGN KEY ( shift_code ) REFERENCES hris.shift( code )    
+ );
+
+CREATE INDEX idx_work_schedule_shift ON hris.work_schedule_shift ( work_schedule_code );
+
+CREATE INDEX idx_work_schedule_shift_0 ON hris.work_schedule_shift ( shift_code );
+
+COMMENT ON COLUMN hris.work_schedule_shift.week_day IS '1 (sunday) -> 7 (saturday)';
+
+CREATE TABLE hris.employee ( 
+	code                 varchar(30)  NOT NULL,
+	is_active            bool DEFAULT true NOT NULL,
+	location_code        varchar(30)  NOT NULL,
+	policy_code          varchar(30)  ,
+	position_code        varchar(30)  NOT NULL,
+	tax_category_code    varchar(30)  NOT NULL,
+	payroll_type_code    varchar(30)  ,
+	email                varchar(60)  NOT NULL,
+	first_name           varchar(100)  NOT NULL,
+	middle_name          varchar(100)  ,
+	last_name            varchar(100)  NOT NULL,
+	address              text  ,
+	birth_date           date  ,
+	gender_code          varchar(2) DEFAULT 'M' NOT NULL,
+	civil_status_code    varchar(2) DEFAULT 'S' NOT NULL,
+	contact_number_1     varchar(30)  ,
+	contact_number_2     varchar(30)  ,
+	basic_salary         numeric(10,4)  NOT NULL,
+	basic_salary_uom     varchar(4) DEFAULT 'MON' NOT NULL,
+	date_hired           date  ,
+	create_at            timestamp  ,
+	updated_at           timestamp  ,
+	CONSTRAINT pk_employee PRIMARY KEY ( code )
+ );
+
+CREATE INDEX idx_employee ON hris.employee ( location_code );
+
+CREATE INDEX idx_employee_0 ON hris.employee ( tax_category_code );
+
+CREATE INDEX idx_employee_1 ON hris.employee ( payroll_type_code );
+
+CREATE INDEX idx_employee_2 ON hris.employee ( position_code );
+
+CREATE INDEX idx_employee_3 ON hris.employee ( policy_code );
+
+COMMENT ON COLUMN hris.employee.basic_salary_uom IS 'UOM = Unit of Measurement: (MON)Month, (DAY)Day, (HR)Hour, (MIN) Minute, (EA) Exact Amount';
+
+CREATE TABLE hris.employee_payroll_item_amount ( 
+	employee_code        varchar(30)  NOT NULL,
+	payroll_item_code    varchar(30)  NOT NULL,
+	amount               numeric(10,4)  NOT NULL,
+	CONSTRAINT pk_employee_payroll_item_amount PRIMARY KEY ( employee_code, payroll_item_code )
+ );
+
+CREATE INDEX idx_employee_payroll_item_amount ON hris.employee_payroll_item_amount ( employee_code );
+
+CREATE INDEX idx_employee_payroll_item_amount_0 ON hris.employee_payroll_item_amount ( payroll_item_code );
+
+CREATE TABLE hris.employee_work_schedule ( 
+	effective_date       date DEFAULT ('now'::text)::date NOT NULL,
+	employee_code        varchar(30)  NOT NULL,
+	work_schedule_code   varchar(30)  NOT NULL,
+	locked               bool DEFAULT false NOT NULL,
+	CONSTRAINT pk_employee_work_schedule PRIMARY KEY ( employee_code, effective_date )
+ );
+
+CREATE INDEX idx_employee_work_schedule ON hris.employee_work_schedule ( employee_code );
+
+CREATE INDEX idx_employee_work_schedule_0 ON hris.employee_work_schedule ( work_schedule_code );
+
+CREATE TABLE hris."position" ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  ,
+	position_level_code  varchar(30)  NOT NULL,
+	parent_code          varchar(30)  ,
+	CONSTRAINT pk_position PRIMARY KEY ( code ),
+	CONSTRAINT idx_position_name UNIQUE ( display_name ) 
+ );
+
+CREATE INDEX idx_position ON hris."position" ( position_level_code );
+
+CREATE INDEX idx_position_0 ON hris."position" ( parent_code );
+
+CREATE TABLE payroll.annual_tax_table ( 
+	id                   bigserial  NOT NULL,
+	over_amount          numeric(10,2)  NOT NULL,
+	under_amount         numeric(10,2)  NOT NULL,
+	tax_due              numeric(10,2)  NOT NULL,
+	tax_due_percent_of_excess integer  NOT NULL,
+	CONSTRAINT pk_bir_annual_salary_tax_table PRIMARY KEY ( id )
+ );
+
+CREATE TABLE payroll.chrono_log ( 
+	employee_code        varchar(30)  NOT NULL,
+	entry_date           date  NOT NULL,
+	time_in              time DEFAULT ('now'::text)::time with time zone NOT NULL,
+	time_out             time  NOT NULL,
+	break_time_in_1      time  ,
+	break_time_out_1     time  ,
+	CONSTRAINT pk_chrono_log PRIMARY KEY ( employee_code, entry_date ),
+	CONSTRAINT fk_chrono_log_employee_code FOREIGN KEY ( employee_code ) REFERENCES hris.employee( code )    
+ );
+
+CREATE INDEX idx_chrono_log ON payroll.chrono_log ( employee_code );
+
+CREATE TABLE payroll.payroll ( 
+	pay_period           date DEFAULT ('now'::text)::date NOT NULL,
+	is_open              bool DEFAULT true NOT NULL,
+	cutoff_start         date  NOT NULL,
+	cutoff_end           date  NOT NULL,
+	include_deductibles  bool DEFAULT false NOT NULL,
+	approved_by          varchar(100)  NOT NULL,
+	prepared_by          varchar(100)  NOT NULL,
+	received_by          varchar(100)  NOT NULL,
+	CONSTRAINT pk_payroll PRIMARY KEY ( pay_period )
+ );
+
+CREATE TABLE payroll.payroll_item ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	type_code            varchar(2)  NOT NULL,
+	computation_uom      varchar(4) DEFAULT 'MIN' NOT NULL,
+	payslip_display_name varchar(100)  NOT NULL,
+	is_employee_amount_required bool DEFAULT true NOT NULL,
+	amount_dependent_on_variable varchar(30)  ,
+	qty_dependent_on_variable varchar  ,
+	system_reserved      bool DEFAULT false NOT NULL,
+	taxable              bool DEFAULT true NOT NULL,
+	multiplier           numeric(10,4) DEFAULT 1 ,
+	divider              numeric(10,4) DEFAULT 1 ,
+	created_at           timestamp  ,
+	updated_at           timestamp  ,
+	CONSTRAINT pk_payroll_item PRIMARY KEY ( code ),
+	CONSTRAINT idx_payroll_item_name UNIQUE ( display_name ) 
+ );
+
+COMMENT ON COLUMN payroll.payroll_item.type_code IS '(D)eduction or (E)arnings';
+
+COMMENT ON COLUMN payroll.payroll_item.computation_uom IS 'UOM = Unit of Measurement: (MON)Month, (DAY)Day,  (HDAY)Half Day, (HR)Hour, (MIN) Minute, (EA) Exact Amount';
+
+COMMENT ON COLUMN payroll.payroll_item.amount_dependent_on_variable IS 'Any columns from employee_payroll_summary table';
+
+COMMENT ON COLUMN payroll.payroll_item.qty_dependent_on_variable IS 'Any columns from employee_payroll_summary table';
+
+CREATE TABLE payroll.payroll_payment_method ( 
+	employee_code        varchar(30)  NOT NULL,
+	payment_method_code  char(2)  NOT NULL,
+	bank_code            varchar(30)  ,
+	account_no           varchar(100)  ,
+	CONSTRAINT pk_payrol_payment_method PRIMARY KEY ( employee_code ),
+	CONSTRAINT fk_payroll_payment_method_bank_code FOREIGN KEY ( bank_code ) REFERENCES "public".bank( code )    ,
+	CONSTRAINT fk_payroll_payment_method_employee_code FOREIGN KEY ( employee_code ) REFERENCES hris.employee( code )    
+ );
+
+CREATE INDEX idx_payroll_payment_method ON payroll.payroll_payment_method ( bank_code );
+
+COMMENT ON COLUMN payroll.payroll_payment_method.payment_method_code IS '(C) cash, (B) Bank Deposit';
+
+CREATE TABLE payroll.payroll_type ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	CONSTRAINT pk_payroll_type PRIMARY KEY ( code ),
+	CONSTRAINT idx_payroll_type_name UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE payroll.philhealth_table ( 
+	salary_bracket_id    bigserial  NOT NULL,
+	salary_range_from    numeric(10,2)  NOT NULL,
+	salary_range_to      numeric(10,2)  NOT NULL,
+	total_contribution   numeric(10,2)  NOT NULL,
+	employer_share       numeric(10,2)  NOT NULL,
+	employee_share       numeric(10,2)  NOT NULL,
+	CONSTRAINT pk_philhealth_tabe PRIMARY KEY ( salary_bracket_id )
+ );
+
+CREATE TABLE payroll.sss_table ( 
+	salary_bracket_id    bigserial  NOT NULL,
+	salary_range_from    numeric(10,2)  NOT NULL,
+	salary_range_to      numeric(10,2)  NOT NULL,
+	total_contribution   numeric(10,2)  NOT NULL,
+	employer_share       numeric(10,2)  NOT NULL,
+	employee_share       numeric(10,2)  NOT NULL,
+	CONSTRAINT pk_sss_table PRIMARY KEY ( salary_bracket_id )
+ );
+
+CREATE TABLE payroll.tax_category ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	annual_exemption_amount numeric(10,2) DEFAULT 0 NOT NULL,
+	CONSTRAINT pk_tax_category PRIMARY KEY ( code )
+ );
+
+CREATE TABLE payroll.employee_payroll_summary ( 
+	employee_code        varchar(30)  NOT NULL,
+	payroll_pay_period   date  NOT NULL,
+	monthly_rate         numeric(10,4)  NOT NULL,
+	semi_monthly_rate    numeric(10,4)  NOT NULL,
+	daily_rate           numeric(10,4)  ,
+	hourly_rate          numeric(10,4)  NOT NULL,
+	minute_rate          numeric(10,4)  NOT NULL,
+	working_day_count    integer  NOT NULL,
+	present_day_count    integer  NOT NULL,
+	absent_day_count     integer  NOT NULL,
+	half_day_absent_count integer  NOT NULL,
+	minutes_late         integer  NOT NULL,
+	minutes_overtime     integer  NOT NULL,
+	minutes_rest_day_overtime integer  NOT NULL,
+	minutes_holiday_overtime integer  NOT NULL,
+	minutes_special_holiday_overtime integer  NOT NULL,
+	minutes_rest_day_holiday_overtime integer  NOT NULL,
+	minutes_rest_day_special_holiday_overtime integer  NOT NULL,
+	CONSTRAINT pk_employee_payroll_summary PRIMARY KEY ( employee_code, payroll_pay_period ),
+	CONSTRAINT fk_employee_payroll_summary_pay_period FOREIGN KEY ( payroll_pay_period ) REFERENCES payroll.payroll( pay_period )    ,
+	CONSTRAINT fk_employee_payroll_summary_employee_code FOREIGN KEY ( employee_code ) REFERENCES hris.employee( code )    
+ );
+
+CREATE INDEX idx_employee_payroll_summary ON payroll.employee_payroll_summary ( payroll_pay_period );
+
+CREATE INDEX idx_employee_payroll_summary_0 ON payroll.employee_payroll_summary ( employee_code );
+
+CREATE TABLE payroll.monthly_tax_table ( 
+	id                   bigserial  NOT NULL,
+	tax_category_code    varchar(30)  NOT NULL,
+	payroll_type_code    varchar(30)  NOT NULL,
+	over_amount          numeric(10,2)  NOT NULL,
+	under_amount         numeric(10,2)  NOT NULL,
+	tax_due              numeric(10,2)  NOT NULL,
+	tax_due_percent_of_excess integer  NOT NULL,
+	CONSTRAINT pk_bir_annual_salary_tax_table_0 PRIMARY KEY ( id ),
+	CONSTRAINT fk_monthly_salary_tax_table_tax_category_code FOREIGN KEY ( tax_category_code ) REFERENCES payroll.tax_category( code )    ,
+	CONSTRAINT fk_monthly_tax_table_payroll_type_code FOREIGN KEY ( payroll_type_code ) REFERENCES payroll.payroll_type( code )    
+ );
+
+CREATE INDEX idx_bir_monthly_salary_tax_table ON payroll.monthly_tax_table ( tax_category_code );
+
+CREATE INDEX idx_monthly_salary_tax_table ON payroll.monthly_tax_table ( payroll_type_code );
+
+CREATE TABLE payroll.payroll_entry ( 
+	payroll_pay_period   date  NOT NULL,
+	employee_code        varchar(30)  NOT NULL,
+	payroll_item_code    varchar(30)  NOT NULL,
+	payroll_generated    bool DEFAULT false NOT NULL,
+	qty                  numeric(10,4)  NOT NULL,
+	amount               numeric(10,4)  NOT NULL,
+	remarks              varchar(100)  ,
+	CONSTRAINT pk_payroll_entry PRIMARY KEY ( payroll_pay_period, employee_code, payroll_item_code ),
+	CONSTRAINT fk_payroll_entry_pay_period FOREIGN KEY ( payroll_pay_period ) REFERENCES payroll.payroll( pay_period )    ,
+	CONSTRAINT fk_payroll_entry_employee_code FOREIGN KEY ( employee_code ) REFERENCES hris.employee( code )    ,
+	CONSTRAINT fk_payroll_entry_item_code FOREIGN KEY ( payroll_item_code ) REFERENCES payroll.payroll_item( code )    
+ );
+
+CREATE INDEX idx_payroll_entry ON payroll.payroll_entry ( payroll_pay_period );
+
+CREATE INDEX idx_payroll_entry_0 ON payroll.payroll_entry ( employee_code );
+
+CREATE INDEX idx_payroll_entry_1 ON payroll.payroll_entry ( payroll_item_code );
+
+CREATE TABLE "public".bank ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	CONSTRAINT pk_bank_account PRIMARY KEY ( code ),
+	CONSTRAINT idx_bank_account UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE "public".company ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	created_at           timestamp  ,
+	updated_at           timestamp  ,
+	CONSTRAINT pk_company PRIMARY KEY ( code ),
+	CONSTRAINT idx_company_name UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE "public"."location" ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	company_code         varchar(30)  NOT NULL,
+	created_at           timestamp  ,
+	updated_at           timestamp  ,
+	CONSTRAINT pk_location PRIMARY KEY ( code ),
+	CONSTRAINT idx_location UNIQUE ( display_name ) ,
+	CONSTRAINT fk_location_company_code FOREIGN KEY ( company_code ) REFERENCES "public".company( code ) ON DELETE CASCADE ON UPDATE CASCADE
+ );
+
+CREATE INDEX idx_location_1 ON "public"."location" ( company_code );
+
+CREATE TABLE "public"."module" ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	CONSTRAINT pk_module PRIMARY KEY ( code ),
+	CONSTRAINT idx_module_name UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE "public".number_series ( 
+	code                 varchar(12)  NOT NULL,
+	module_code          varchar(30)  NOT NULL,
+	starting_number      integer DEFAULT 0 NOT NULL,
+	ending_number        integer DEFAULT 99999 NOT NULL,
+	last_number_used     integer DEFAULT 0 NOT NULL,
+	effective_date       date DEFAULT ('now'::text)::date NOT NULL,
+	created_at           timestamp  ,
+	updated_at           timestamp  ,
+	CONSTRAINT pk_number_series PRIMARY KEY ( code ),
+	CONSTRAINT fk_number_series_module_code FOREIGN KEY ( module_code ) REFERENCES "public"."module"( code )    
+ );
+
+CREATE INDEX idx_number_series ON "public".number_series ( module_code );
+
+CREATE TABLE "public".user_account ( 
+	username             varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	"password"           varchar(120)  NOT NULL,
+	location_full_access bool DEFAULT false NOT NULL,
+	remember_token       varchar(120)  ,
+	created_at           timestamp  ,
+	updated_at           timestamp  ,
+	CONSTRAINT pk_user_account PRIMARY KEY ( username )
+ );
+
+CREATE TABLE "public".user_location ( 
+	username             varchar(30)  NOT NULL,
+	location_code        varchar(30)  NOT NULL,
+	is_default           bool DEFAULT false NOT NULL,
+	CONSTRAINT pk_user_location PRIMARY KEY ( username, location_code ),
+	CONSTRAINT fk_user_location_username FOREIGN KEY ( username ) REFERENCES "public".user_account( username )    ,
+	CONSTRAINT fk_user_location_code FOREIGN KEY ( location_code ) REFERENCES "public"."location"( code )    
+ );
+
+CREATE INDEX idx_user_location ON "public".user_location ( username );
+
+CREATE INDEX idx_user_location_0 ON "public".user_location ( location_code );
+
+CREATE TABLE "security".access_control ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	CONSTRAINT pk_access_control PRIMARY KEY ( code ),
+	CONSTRAINT idx_access_control_name UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE "security"."role" ( 
+	code                 varchar(30)  NOT NULL,
+	display_name         varchar(100)  NOT NULL,
+	CONSTRAINT pk_role PRIMARY KEY ( code ),
+	CONSTRAINT idx_role_name UNIQUE ( display_name ) 
+ );
+
+CREATE TABLE "security".user_role ( 
+	username             varchar(30)  NOT NULL,
+	role_code            varchar(30)  NOT NULL,
+	CONSTRAINT pk_user_role PRIMARY KEY ( username, role_code ),
+	CONSTRAINT fk_user_role_username FOREIGN KEY ( username ) REFERENCES "public".user_account( username )    ,
+	CONSTRAINT fk_user_role_code FOREIGN KEY ( role_code ) REFERENCES "security"."role"( code )    
+ );
+
+CREATE INDEX idx_user_role ON "security".user_role ( username );
+
+CREATE INDEX idx_user_role_0 ON "security".user_role ( role_code );
+
+CREATE TABLE "security".access_control_list ( 
+	role_code            varchar(30)  NOT NULL,
+	module_code          varchar(30)  NOT NULL,
+	access_control_code  varchar(30)  NOT NULL,
+	CONSTRAINT pk_access_control_list PRIMARY KEY ( role_code, module_code, access_control_code ),
+	CONSTRAINT fk_access_control_list_role_code FOREIGN KEY ( role_code ) REFERENCES "security"."role"( code )    ,
+	CONSTRAINT fk_access_control_list_access_control_code FOREIGN KEY ( access_control_code ) REFERENCES "security".access_control( code )    ,
+	CONSTRAINT fk_access_control_list_module_code FOREIGN KEY ( module_code ) REFERENCES "public"."module"( code )    
+ );
+
+CREATE INDEX idx_access_control_list ON "security".access_control_list ( role_code );
+
+CREATE INDEX idx_access_control_list_0 ON "security".access_control_list ( access_control_code );
+
+CREATE INDEX idx_access_control_list_1 ON "security".access_control_list ( module_code );
+
+ALTER TABLE hris.employee ADD CONSTRAINT fk_employee_location_code FOREIGN KEY ( location_code ) REFERENCES "public"."location"( code );
+
+COMMENT ON CONSTRAINT fk_employee_location_code ON hris.employee IS '';
+
+ALTER TABLE hris.employee ADD CONSTRAINT fk_employee_tax_category_code FOREIGN KEY ( tax_category_code ) REFERENCES payroll.tax_category( code );
+
+COMMENT ON CONSTRAINT fk_employee_tax_category_code ON hris.employee IS '';
+
+ALTER TABLE hris.employee ADD CONSTRAINT fk_employee_position_code FOREIGN KEY ( position_code ) REFERENCES hris."position"( code );
+
+COMMENT ON CONSTRAINT fk_employee_position_code ON hris.employee IS '';
+
+ALTER TABLE hris.employee ADD CONSTRAINT fk_employee_policy_code FOREIGN KEY ( policy_code ) REFERENCES hris.policy( code );
+
+COMMENT ON CONSTRAINT fk_employee_policy_code ON hris.employee IS '';
+
+ALTER TABLE hris.employee ADD CONSTRAINT fk_employee_payroll_type_code FOREIGN KEY ( payroll_type_code ) REFERENCES payroll.payroll_type( code );
+
+COMMENT ON CONSTRAINT fk_employee_payroll_type_code ON hris.employee IS '';
+
+ALTER TABLE hris.employee_payroll_item_amount ADD CONSTRAINT fk_employee_payroll_item_amount_employee_code FOREIGN KEY ( employee_code ) REFERENCES hris.employee( code );
+
+COMMENT ON CONSTRAINT fk_employee_payroll_item_amount_employee_code ON hris.employee_payroll_item_amount IS '';
+
+ALTER TABLE hris.employee_payroll_item_amount ADD CONSTRAINT fk_employee_payroll_item_amount_payroll_item_code FOREIGN KEY ( payroll_item_code ) REFERENCES payroll.payroll_item( code );
+
+COMMENT ON CONSTRAINT fk_employee_payroll_item_amount_payroll_item_code ON hris.employee_payroll_item_amount IS '';
+
+ALTER TABLE hris.employee_work_schedule ADD CONSTRAINT fk_employee_work_schedule_employee_code FOREIGN KEY ( employee_code ) REFERENCES hris.employee( code );
+
+COMMENT ON CONSTRAINT fk_employee_work_schedule_employee_code ON hris.employee_work_schedule IS '';
+
+ALTER TABLE hris.employee_work_schedule ADD CONSTRAINT fk_employee_work_schedule_code FOREIGN KEY ( work_schedule_code ) REFERENCES hris.work_schedule( code );
+
+COMMENT ON CONSTRAINT fk_employee_work_schedule_code ON hris.employee_work_schedule IS '';
+
+ALTER TABLE hris."position" ADD CONSTRAINT fk_position_level_code FOREIGN KEY ( position_level_code ) REFERENCES hris.position_level( code );
+
+COMMENT ON CONSTRAINT fk_position_level_code ON hris."position" IS '';
+
+ALTER TABLE hris."position" ADD CONSTRAINT fk_position_parent_code FOREIGN KEY ( parent_code ) REFERENCES hris."position"( code );
+
+COMMENT ON CONSTRAINT fk_position_parent_code ON hris."position" IS '';
+
+]]></string>
+		</script>
+	</layout>
+</project>
