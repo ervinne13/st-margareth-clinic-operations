@@ -24,9 +24,11 @@ class CreateAccessControlListJunctionTable extends Migration
 
             $table->primary(['role_code', 'module_code'], 'access_control_list_pk');
 
-//            $table->foreign('role_code')
-//                ->references('code')
-//                ->on('code');
+            $table->foreign('role_code')
+                ->references('code')
+                ->on('role')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
 
             $table->foreign('module_code')
                 ->references('code')
@@ -37,7 +39,6 @@ class CreateAccessControlListJunctionTable extends Migration
             $table->foreign('access_control_code')
                 ->references('code')
                 ->on('access_control');
-            
         });
     }
 

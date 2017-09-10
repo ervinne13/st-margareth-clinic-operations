@@ -16,7 +16,7 @@ class CreateEmployeeTable extends Migration
     {
         Schema::create('employee', function (Blueprint $table)
         {
-            $table->string('employee_number', 30)->primary();
+            $table->string('identifier', 30)->primary();
             $table->string('title', 10);
             $table->string('type_code', 30)->comment("PSYC (Physician), STF (Staff), ADMIN (Administrator)");
             $table->string('display_name', 100);

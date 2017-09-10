@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserAccountLocationJunctionTable extends Migration
+class CreateRolePermissionTable extends Migration
 {
 
     /**
@@ -14,23 +14,24 @@ class CreateUserAccountLocationJunctionTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_account_location', function (Blueprint $table)
+        Schema::create('role_permission', function (Blueprint $table)
         {
-            $table->string('user_account_username', 30);
-            $table->string('location_code', 30);
+            $table->string('role_code', 30);
+            $table->string('permission_code', 30);
+
             $table->timestamps();
 
-            $table->primary(['user_account_username', 'location_code'], 'user_account_location_pk');
+            $table->primary(['role_code', "permission_code"], 'role_permission_pk');
 
-            $table->foreign('user_account_username')
-                ->references('username')
-                ->on('user_account')
+            $table->foreign('role_code')
+                ->references('code')
+                ->on('role')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->foreign('location_code')
+            $table->foreign('permission_code')
                 ->references('code')
-                ->on('location')
+                ->on('permission')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });
@@ -43,7 +44,7 @@ class CreateUserAccountLocationJunctionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_account_location');
+        Schema::dropIfExists('role_permission');
     }
 
 }

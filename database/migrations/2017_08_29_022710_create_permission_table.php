@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAccessControlTable extends Migration
+class CreatePermissionTable extends Migration
 {
 
     /**
@@ -14,12 +14,18 @@ class CreateAccessControlTable extends Migration
      */
     public function up()
     {
-        Schema::create('access_control', function (Blueprint $table)
+        Schema::create('permission', function (Blueprint $table)
         {
             $table->string('code', 30)->primary();
-            $table->integer('level')->comment("1 - View, 2 - CRUD own documents, 3 CRUD other documents");
+            $table->string('module_code', 30);
             $table->string('display_name', 30)->index();
             $table->timestamps();
+
+            $table->foreign('module_code')
+                ->references('code')
+                ->on('module')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 
@@ -30,7 +36,7 @@ class CreateAccessControlTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('access_control');
+        Schema::dropIfExists('permission');
     }
 
 }

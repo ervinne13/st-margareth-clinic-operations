@@ -24,11 +24,15 @@ class CreateUserAccountRoleJunctionTable extends Migration
 
             $table->foreign('user_account_username')
                 ->references('username')
-                ->on('user_account');
+                ->on('user_account')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
 
-//            $table->foreign('role_code')
-//                ->references('role')
-//                ->on('code');
+            $table->foreign('role_code')
+                ->references('code')
+                ->on('role')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

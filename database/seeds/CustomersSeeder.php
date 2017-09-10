@@ -27,7 +27,7 @@ class CustomersSeeder extends Seeder
         CustomerCategory::insert($customerCategories);
 
         $customers = [
-                ["EXT", "Out Patient Department", "7 Estanislao St. Lakeview Homes, Putatan, Muntinlupa City"],
+                ["OPD", "OPD Local Customer", "7 Estanislao St. Lakeview Homes, Putatan, Muntinlupa City"],
                 ["OPD", "PHARMA", ""],
                 ["EXT", "Ospital ng Muntinlupa", "Civic Drive Filinvest Ave Corporate City, Alabang, Muntinlupa, 1780 Metro Manila"],
                 ["EXT", "Asian Hospital & Medical Center", "2205 Civic Dr, Alabang, Muntinlupa, 1780 Metro Manila"],
@@ -37,10 +37,10 @@ class CustomersSeeder extends Seeder
         $customerRows = [];
         foreach ( $customers AS $customer ) {
             $customerRows [] = [
-                "customer_number" => $NSRepo->claimNextAvailableNumber(Customer::NS_CODE),
-                "category_code"   => $customer[0],
-                "display_name"    => $customer[1],
-                "address"         => $customer[2]
+                "identifier"    => $NSRepo->claimNextAvailableNumber(Customer::NS_CODE),
+                "category_code" => $customer[0],
+                "display_name"  => $customer[1],
+                "address"       => $customer[2]
             ];
         }
 

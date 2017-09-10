@@ -17,7 +17,7 @@ class CreateModulesTable extends Migration
         Schema::create('module', function (Blueprint $table)
         {
             $table->string('code', 30)->primary();
-            $table->integer("max_access_level");
+            $table->integer("max_access_level")->default(1);
             $table->string("display_name", 100)->unique();
             $table->timestamps();
         });

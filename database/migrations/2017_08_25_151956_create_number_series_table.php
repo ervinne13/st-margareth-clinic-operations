@@ -30,7 +30,9 @@ class CreateNumberSeriesTable extends Migration
 
             $table->foreign('module_code')
                 ->references('code')
-                ->on('module');
+                ->on('module')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 
