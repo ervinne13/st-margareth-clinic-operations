@@ -44,7 +44,7 @@ class ModuleTransformer {
             "icon"    => "fa-file",
             "name"    => "Master Files",
             "modules" => [
-                    ["code" => "NS", "name" => "Number Series", "icon" => "fa-file-o", "url" => "master-files/number-series"],
+                    ["code" => "NS", "name" => "Number Series", "icon" => "fa-sort-numeric-asc", "url" => "master-files/number-series"],
                     ["code" => "V", "name" => "Vaccines", "icon" => "fa-file-o", "url" => "master-files/vaccine"],
                     ["code" => "I", "name" => "Item", "icon" => "fa-file-o", "url" => "master-files/items"],
                     ["code" => "UOM", "name" => "Unit Of Measurement", "icon" => "fa-file-o", "url" => "master-files/uom"],
