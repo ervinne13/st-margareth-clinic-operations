@@ -4,13 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-<<<<<<< HEAD
-    "hash": "1d974e2f4fb85af68d88b89506107827",
+    "hash": "978f8842516df3405e8640f24640c96e",
     "content-hash": "9958cebe4c7126e339f6ff8fc3d55382",
-=======
-    "hash": "a5f9e29ec59b412da218fe1e8dbd1621",
-    "content-hash": "96098e473b028cdb2529580554a1ae3e",
->>>>>>> eadf9f45af12752493ef4092c50ac64a80c4dd0f
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -240,7 +235,6 @@
                 }
             ],
             "time": "2015-04-20 18:58:01"
-<<<<<<< HEAD
         },
         {
             "name": "jeremeamia/SuperClosure",
@@ -299,8 +293,6 @@
                 "tokenizer"
             ],
             "time": "2016-12-07 09:37:55"
-=======
->>>>>>> eadf9f45af12752493ef4092c50ac64a80c4dd0f
         },
         {
             "name": "laravel/framework",
@@ -493,7 +485,6 @@
                 "psysh"
             ],
             "time": "2017-07-13 13:11:05"
-<<<<<<< HEAD
         },
         {
             "name": "laravelcollective/html",
@@ -548,8 +539,6 @@
             "description": "HTML and Form Builders for the Laravel Framework",
             "homepage": "http://laravelcollective.com",
             "time": "2017-05-22 06:35:07"
-=======
->>>>>>> eadf9f45af12752493ef4092c50ac64a80c4dd0f
         },
         {
             "name": "league/flysystem",
@@ -633,7 +622,6 @@
                 "storage"
             ],
             "time": "2017-08-06 17:41:04"
-<<<<<<< HEAD
         },
         {
             "name": "league/fractal",
@@ -776,8 +764,6 @@
                 "laravel"
             ],
             "time": "2017-07-26 18:04:04"
-=======
->>>>>>> eadf9f45af12752493ef4092c50ac64a80c4dd0f
         },
         {
             "name": "monolog/monolog",
@@ -1052,7 +1038,6 @@
                 "random"
             ],
             "time": "2017-03-13 16:27:32"
-<<<<<<< HEAD
         },
         {
             "name": "phpoffice/phpexcel",
@@ -1110,8 +1095,6 @@
                 "xlsx"
             ],
             "time": "2015-05-01 07:00:55"
-=======
->>>>>>> eadf9f45af12752493ef4092c50ac64a80c4dd0f
         },
         {
             "name": "psr/log",
@@ -1856,7 +1839,6 @@
                 "shim"
             ],
             "time": "2017-06-14 15:44:48"
-<<<<<<< HEAD
         },
         {
             "name": "symfony/polyfill-php56",
@@ -1965,8 +1947,6 @@
                 "shim"
             ],
             "time": "2017-07-05 15:09:33"
-=======
->>>>>>> eadf9f45af12752493ef4092c50ac64a80c4dd0f
         },
         {
             "name": "symfony/process",
@@ -2324,7 +2304,6 @@
                 "environment"
             ],
             "time": "2016-09-01 10:05:43"
-<<<<<<< HEAD
         },
         {
             "name": "yajra/laravel-datatables-buttons",
@@ -2451,16 +2430,16 @@
         },
         {
             "name": "yajra/laravel-datatables-oracle",
-            "version": "v7.9.9",
+            "version": "v7.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yajra/laravel-datatables.git",
-                "reference": "ad6a456ebb018ba1485ed19c064b95742ebe5758"
+                "reference": "05d06c883e56f318e919ed614571f96db9c5a0de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yajra/laravel-datatables/zipball/ad6a456ebb018ba1485ed19c064b95742ebe5758",
-                "reference": "ad6a456ebb018ba1485ed19c064b95742ebe5758",
+                "url": "https://api.github.com/repos/yajra/laravel-datatables/zipball/05d06c883e56f318e919ed614571f96db9c5a0de",
+                "reference": "05d06c883e56f318e919ed614571f96db9c5a0de",
                 "shasum": ""
             },
             "require": {
@@ -2508,40 +2487,38 @@
                 "jquery",
                 "laravel"
             ],
-            "time": "2017-08-01 14:50:42"
-=======
->>>>>>> eadf9f45af12752493ef4092c50ac64a80c4dd0f
+            "time": "2017-08-24 05:27:20"
         }
     ],
     "packages-dev": [
         {
             "name": "doctrine/instantiator",
-            "version": "1.1.0",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/instantiator.git",
-                "reference": "185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda"
+                "reference": "8e884e78f9f0eb1329e445619e04456e64d8051d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda",
-                "reference": "185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda",
+                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/8e884e78f9f0eb1329e445619e04456e64d8051d",
+                "reference": "8e884e78f9f0eb1329e445619e04456e64d8051d",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1"
+                "php": ">=5.3,<8.0-DEV"
             },
             "require-dev": {
                 "athletic/athletic": "~0.1.8",
                 "ext-pdo": "*",
                 "ext-phar": "*",
-                "phpunit/phpunit": "^6.2.3",
-                "squizlabs/php_codesniffer": "^3.0.2"
+                "phpunit/phpunit": "~4.0",
+                "squizlabs/php_codesniffer": "~2.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.2.x-dev"
+                    "dev-master": "1.0.x-dev"
                 }
             },
             "autoload": {
@@ -2566,7 +2543,7 @@
                 "constructor",
                 "instantiate"
             ],
-            "time": "2017-07-22 11:58:36"
+            "time": "2015-06-14 21:17:01"
         },
         {
             "name": "fzaninotto/faker",
