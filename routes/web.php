@@ -11,9 +11,13 @@
   |
  */
 
-Route::get('/', function () {
-    return view('skarla-tester');
+Route::get("/logout", "Auth\LoginController@logout");
+Auth::routes();
+
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/', 'HomeController@index');
+
+    Route::resource('/child-health-records', 'ChildHealthRecordController');
 });
 
-
-Route::get('/test/nested/create', "HomeController@create");

@@ -13,11 +13,11 @@ class CreateUsersTable extends Migration {
      */
     public function up() {
         Schema::create('user_account', function (Blueprint $table) {
-            $table->string('username', 30)->primary();
-            $table->boolean('is_active');
-            $table->boolean('has_location_full_access');
-            $table->string('display_name', 100);
-            $table->string('password');
+            $table->string("username", 30)->primary();
+            $table->boolean("is_active")->default(false);
+            $table->boolean("location_full_access")->default(false);
+            $table->string("display_name", 100);
+            $table->string("password", 120);
             $table->rememberToken();
             $table->timestamps();
         });
