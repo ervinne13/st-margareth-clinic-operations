@@ -15,8 +15,8 @@
                         <div class="avatar avatar-image avatar-lg center-block">
                             <img src="{{url("/static-img/Caduceus.png")}}" alt="Avatar">                            
                         </div>
-                        <h5 class="media-heading text-center m-t-2 m-b-0 text-white"><span>Guy Jacobson</span></h5>
-                        <p class="text-center small">Senior Front-end Developer</p>
+                        <h5 class="media-heading text-center m-t-2 m-b-0 text-white"><span>{{Auth::user()->getDisplayName()}}</span></h5>
+                        <p class="text-center small">{{Auth::user()->getSerializedRoleNames()}}</p>
                     </div>
                 </div>
 
