@@ -114,6 +114,10 @@ class DefaultRolesAndUsersSeeder extends Seeder
         $admin->password     = $password;
 
         $admin->save();
+
+        $role = Role::find('ADMIN');
+
+        $admin->roles()->save($role);
     }
 
 }

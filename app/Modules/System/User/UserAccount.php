@@ -73,7 +73,7 @@ class UserAccount extends Authenticatable
     public function getSerializedRoleNames()
     {
         $roles     = $this->roles;
-        $roleNames = array_column($roles->toArray(), "name");
+        $roleNames = array_column($roles->toArray(), "display_name");
 
         return implode(", ", $roleNames);
     }
