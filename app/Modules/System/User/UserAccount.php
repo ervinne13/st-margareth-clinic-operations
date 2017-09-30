@@ -2,8 +2,10 @@
 
 namespace App\Modules\System\User;
 
-use Illuminate\Notifications\Notifiable;
+use App\Modules\Security\Role\Role;
+use Faker\Provider\Company;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class UserAccount extends Authenticatable
 {
@@ -42,7 +44,7 @@ class UserAccount extends Authenticatable
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class, "user_role", "user_username", "role_code");
+        return $this->belongsToMany(Role::class, "user_account_role", "user_account_username", "role_code");
     }
 
     public function locations()
