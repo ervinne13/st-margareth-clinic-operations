@@ -25,7 +25,11 @@ $navPath      = "layouts.skarla.nav";
 
         @include("{$partialsPath}.assets.default-css")
         @include("{$partialsPath}.others.favicon")
+        
+        @include("{$partialsPath}.assets.composite-css")
 
+        @yield('css')
+        
         <script>
             let ASSET_PATH_BASE = "{{url('/vendor/skarla/assets')}}";
             let BASE_URL = "{{url('/')}}";
@@ -48,7 +52,7 @@ $navPath      = "layouts.skarla.nav";
 
             <div class="content">
                 <div class="container">                    
-                    @yield("content")
+                    @yield('content')
                 </div>
             </div>
 
@@ -81,6 +85,11 @@ $navPath      = "layouts.skarla.nav";
 
         <!-- Bower Libraries Styles -->
         @include("{$partialsPath}.assets.default-js")
+        
+        @include("{$partialsPath}.assets.composite-js")
+        
+        @yield('js')
+        
     </body>
 
 </html>

@@ -19,7 +19,7 @@ class SkarlaViewComposer {
      * @return void
      */
     public function compose(View $view) {
-        $view->with('actionName', $this->getActionName());
+        $view->with('routeActionName', $this->getActionName());
     }
 
     protected function getActionName() {
