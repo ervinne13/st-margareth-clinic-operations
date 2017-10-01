@@ -2,6 +2,7 @@
 
 use App\Modules\Security\ACL\AccessControl;
 use App\Modules\Security\ACL\AccessControlList;
+use App\Modules\Security\ACL\ScopeControl;
 use App\Modules\Security\Role\Role;
 use App\Modules\System\User\UserAccount;
 use Illuminate\Database\Seeder;
@@ -9,11 +10,10 @@ use Illuminate\Database\Seeder;
 class DefaultRolesAndUsersSeeder extends Seeder
 {
 
-    protected $inventoryManagerModules  = ["IT", "I", "PO"];
-    protected $inventoryViewerModules   = ["IL", "AP"];
-    protected $operationsManagerModules = ["EODC", "CHR"];
-    protected $operationsAuthorModules  = ["PO", "SJ", "EODC", "CHR", "CIO"];
-    protected $operationsViewerModules  = ["IL", "AR", "AP", "SOF"];
+    protected $inventoryManagerModules = ["IT", "I", "PO"];
+    protected $inventoryViewerModules  = ["IL", "AP"];
+    protected $operationsAuthorModules = ["PO", "SJ", "EODC", "CHR", "CIO"];
+    protected $operationsViewerModules = ["IL", "AR", "AP", "SOF"];
 
     /**
      * Run the database seeds.
@@ -24,6 +24,7 @@ class DefaultRolesAndUsersSeeder extends Seeder
     {
         $this->createRoles();
         $this->createAccessControls();
+        $this->createScopeControls();
         $this->createAccessControlLists();
         $this->createAdmin();
     }
@@ -50,6 +51,16 @@ class DefaultRolesAndUsersSeeder extends Seeder
         AccessControl::insert($accessControls);
     }
 
+    private function createScopeControls()
+    {
+        $scopeControls = [
+            ["code" => "OWNER", "level" => 1, "display_name" => "Owned Documents"],
+            ["code" => "LOCATION", "level" => 2, "display_name" => "Same Location"],
+            ["code" => "ALL", "level" => 3, "display_name" => "All Documents"]
+        ];
+        ScopeControl::insert($scopeControls);
+    }
+
     private function createAccessControlLists()
     {
 
@@ -61,6 +72,7 @@ class DefaultRolesAndUsersSeeder extends Seeder
                 "role_code"           => "INVMAN",
                 "module_code"         => $moduleCode,
                 "access_control_code" => "MANAGER",
+                "scope_control_code"  => "LOCATION",
             ];
         }
 
@@ -69,6 +81,7 @@ class DefaultRolesAndUsersSeeder extends Seeder
                 "role_code"           => "INVMAN",
                 "module_code"         => $moduleCode,
                 "access_control_code" => "VIEWER",
+                "scope_control_code"  => "LOCATION",
             ];
         }
 
@@ -77,19 +90,12 @@ class DefaultRolesAndUsersSeeder extends Seeder
         //  out patient department staff
         $operationsStaffModules = [];
 
-        foreach ( $this->operationsManagerModules AS $moduleCode ) {
-            $operationsStaffModules[] = [
-                "role_code"           => "OPDSTF",
-                "module_code"         => $moduleCode,
-                "access_control_code" => "MANAGER",
-            ];
-        }
-
         foreach ( $this->operationsAuthorModules AS $moduleCode ) {
             $operationsStaffModules[] = [
                 "role_code"           => "OPDSTF",
                 "module_code"         => $moduleCode,
                 "access_control_code" => "AUTHOR",
+                "scope_control_code"  => "LOCATION",
             ];
         }
 
@@ -98,6 +104,7 @@ class DefaultRolesAndUsersSeeder extends Seeder
                 "role_code"           => "OPDSTF",
                 "module_code"         => $moduleCode,
                 "access_control_code" => "VIEWER",
+                "scope_control_code"  => "LOCATION",
             ];
         }
 
@@ -114,6 +121,10 @@ class DefaultRolesAndUsersSeeder extends Seeder
         $admin->password     = $password;
 
         $admin->save();
+
+        $role = Role::find('ADMIN');
+
+        $admin->roles()->save($role);
     }
 
 }

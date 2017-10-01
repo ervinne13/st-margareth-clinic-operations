@@ -14,7 +14,7 @@ $navPath      = "layouts.skarla.nav";
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
         <title>
-            SKARLA | Default Fixed 
+            {{$pageTitle or config('app.name')}}
         </title>
 
         <!--START Loader -->
@@ -25,7 +25,11 @@ $navPath      = "layouts.skarla.nav";
 
         @include("{$partialsPath}.assets.default-css")
         @include("{$partialsPath}.others.favicon")
+        
+        @include("{$partialsPath}.assets.composite-css")
 
+        @yield('css')
+        
         <script>
             let ASSET_PATH_BASE = "{{url('/vendor/skarla/assets')}}";
             let BASE_URL = "{{url('/')}}";
@@ -39,14 +43,16 @@ $navPath      = "layouts.skarla.nav";
         <script src="{{skarla_assets_url("/vendor/js/lib.min.js")}}"></script>
 
         <div class="main-wrap">
-            <nav class="navigation">                
-                @include("{$navPath}.top")
+            <nav class="navigation">
+                @if(Auth::check())
+                @include("{$navPath}.top")                                
                 @include("{$navPath}.dynamic-access-left")
+                @endif
             </nav>
 
             <div class="content">
                 <div class="container">                    
-                    @yield("content")
+                    @yield('content')
                 </div>
             </div>
 
@@ -79,6 +85,11 @@ $navPath      = "layouts.skarla.nav";
 
         <!-- Bower Libraries Styles -->
         @include("{$partialsPath}.assets.default-js")
+        
+        @include("{$partialsPath}.assets.composite-js")
+        
+        @yield('js')
+        
     </body>
 
 </html>

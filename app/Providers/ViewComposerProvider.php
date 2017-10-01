@@ -14,8 +14,8 @@ class ViewComposerProvider extends ServiceProvider {
      *
      * @return void
      */
-    public function boot() {
-        View::composer('layouts.skarla', SkarlaViewComposer::class);
+    public function boot() {        
+        View::composer('*', SkarlaViewComposer::class);
         View::composer('layouts.skarla.nav.dynamic-access-left', SkarlaDynamicAccessLeftNav::class);
     }
 

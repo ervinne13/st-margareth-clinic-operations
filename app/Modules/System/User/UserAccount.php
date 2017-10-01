@@ -2,8 +2,10 @@
 
 namespace App\Modules\System\User;
 
-use Illuminate\Notifications\Notifiable;
+use App\Modules\Security\Role\Role;
+use Faker\Provider\Company;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class UserAccount extends Authenticatable
 {
@@ -42,7 +44,7 @@ class UserAccount extends Authenticatable
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class, "user_role", "user_username", "role_code");
+        return $this->belongsToMany(Role::class, "user_account_role", "user_account_username", "role_code");
     }
 
     public function locations()
@@ -71,7 +73,7 @@ class UserAccount extends Authenticatable
     public function getSerializedRoleNames()
     {
         $roles     = $this->roles;
-        $roleNames = array_column($roles->toArray(), "name");
+        $roleNames = array_column($roles->toArray(), "display_name");
 
         return implode(", ", $roleNames);
     }
@@ -109,6 +111,16 @@ class UserAccount extends Authenticatable
         }
 
         return null;
+    }
+
+    // </editor-fold>
+
+    /**/
+    // <editor-fold defaultstate="collapsed" desc="Encapsulations">
+
+    public function getDisplayName()
+    {
+        return $this->display_name;
     }
 
     // </editor-fold>
